@@ -42,7 +42,7 @@
             line-height: 1.7;
             /* 移除flex堆叠上下文，解决z-index失效 */
         }
-        /* ========== 修复1：画布放最底层，不遮挡页面内容 ========== */
+        /* ========== 画布放最底层，不遮挡页面内容 ========== */
         #heartCanvas {
             position: fixed;
             top: 0;
@@ -337,7 +337,7 @@
                         <div class="mt-4 space-y-3">
                             <p class="text-gray-700">💬 QQ联系方式</p>
                             <p class="text-gray-400 text-xs">期待与各位技术大佬一起交流学习</p>
-                            <div class="bg-slate-100 w-fit px-3 py-2 rounded text-gray-800 border border-slate-200">QQ号：3171882051</div>
+                            <div class="bg-slate-100 w-fit px-3 py-2 rounded text-gray-800 border border-slate-200">QQ号：2324688599</div>
                         </div>
                     </div>
                 </div>
@@ -562,9 +562,8 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// 修复2：彻底删除半透白填充遮罩，只清除透明画布，不会盖住页面文字
+// 只清空画布透明，无白色遮罩，不会盖住页面文字
 function renderLoop() {
-    // 只清空画布（透明，不再填充白色遮罩）
     ctx.clearRect(0,0,canvas.width,canvas.height);
     for(let i=heartList.length-1;i>=0;i--){
         const heart = heartList[i];
