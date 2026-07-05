@@ -87,8 +87,8 @@
             width: 140px;
             height: 140px;
             border-radius: 50%;
-            background: rgba(37, 99, 0.08);
-            padding: 8;
+            background: rgba(37, 99, 235, 0.08);
+            padding: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -136,7 +136,7 @@
             background: #e2e8f0;
         }
         .card-light {
-            background: rgba(255,255,0.9);
+            background: rgba(255,255,255,0.9);
             border: 1px solid #e5e7eb;
             border-radius: 20px;
             box-shadow: 0 6px 24px rgba(0,0,0,0.04);
@@ -169,7 +169,7 @@
             position: relative;
         }
         .glass-bar {
-            background: rgba(255,255,0.85);
+            background: rgba(255,255,255,0.85);
             border: 1px solid #e5e7eb;
             border-radius: 16px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.03);
@@ -215,12 +215,12 @@
             color: #2563eb;
             padding: 3px 10px;
             border-radius: 99px;
-            font-size: 12;
+            font-size: 12px;
         }
         .hover-scale {
             cursor: none;
         }
-        /* 音乐播放器UI */
+        /* 音乐播放器 修复列表变黄样式 */
         .music-box {
             position: fixed;
             bottom: 24px;
@@ -244,7 +244,7 @@
         }
         .music-panel {
             width: 360px;
-            background: rgba(255,255,0.96);
+            background: rgba(255,255,255,0.96);
             border: 1px solid #e5e7eb;
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.08);
@@ -266,6 +266,7 @@
             border-radius:12px;
             padding:8px 12px;
             outline:none;
+            color:#222;
         }
         .music-search button {
             background:#ncm;
@@ -275,21 +276,28 @@
             padding:0 12px;
             cursor:pointer;
         }
+        /* 强制重置歌曲列表，清除黄色默认样式 */
         .song-list {
             max-height:140px;
             overflow-y:auto;
             margin:10px 0;
+            list-style: none !important;
+            color:#222 !important;
+            background: transparent !important;
         }
         .song-item {
             padding:6px 4px;
-            font-size:13;
+            font-size:13px;
             display:flex;
             justify-content:space-between;
             cursor:pointer;
             border-radius:8px;
+            color:#222 !important;
+            background: transparent !important;
         }
         .song-item:hover {
-            background:#f1f5f9;
+            background:#f1f5f9 !important;
+            color:#2563eb !important;
         }
         .music-progress {
             width: 100%;
@@ -308,7 +316,7 @@
         .music-time-row {
             display: flex;
             justify-content: space-between;
-            font-size: 12;
+            font-size: 12px;
             color: #666;
         }
         .music-btn-row {
@@ -333,39 +341,41 @@
         .music-title {
             font-weight: 600;
             text-align: center;
-            font-size: 15;
+            font-size: 15px;
             color: #222;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        /* 顶部日期 */
+        /* 顶部实时日期栏 */
         .date-bar {
             text-align:center;
             padding:8px 0;
             color:#444;
-            font-size:14;
+            font-size:14px;
         }
     </style>
 </head>
 <body class="relative">
+    <!-- 底层网格背景 -->
     <div class="hero-bg">
         <div class="grid-lines"></div>
         <div class="dot-deco dot1"></div>
         <div class="dot-deco dot2"></div>
         <div class="dot-deco dot3"></div>
     </div>
+    <!-- 爱心粒子画布 -->
     <canvas id="heartCanvas"></canvas>
 
-    <!-- 音乐播放器（带搜索） -->
+    <!-- QQ音乐ffapi播放器 -->
     <div class="music-box">
         <div class="music-panel" id="musicPanel">
             <div class="music-search">
-                <input id="searchInput" placeholder="输入歌曲名搜索网易云">
+                <input id="searchInput" placeholder="输入歌曲/歌手搜索QQ音乐">
                 <button id="searchBtn">搜索</button>
             </div>
-            <div class="song-list" id="songList"></div>
-            <div class="music-title" id="musicTitle">未选择歌曲</div>
+            <ul class="song-list" id="songList"></ul>
+            <div class="music-title" id="musicTitle">晚风纯音乐</div>
             <div class="music-progress" id="progressWrap">
                 <div class="music-progress-bar" id="progressBar"></div>
             </div>
@@ -385,13 +395,16 @@
         </div>
     </div>
 
+    <!-- 页面主体内容层 -->
     <div class="page-layer">
+        <!-- 顶部实时日期 -->
         <div class="date-bar" id="dateBox"></div>
+        <!-- 导航栏 -->
         <header class="wrap glass-bar sticky top-0 mt-2 px-6 py-4 flex justify-between items-center hover-scale">
             <a href="#" class="text-xl font-bold text-gray-800 flex items-center gap-2">
                 <i class="fa fa-feather text-primary"></i>飞鸟折白梅
             </a>
-            <nav class="hidden md:flex gap-7 text-sm">
+            <nav class="hidden md:flex gap-7 text-gray-600 text-sm">
                 <a href="#" class="text-primary font-medium hover-scale">首页</a>
                 <a href="#article" class="hover:text-primary hover-scale">文章</a>
                 <a href="#project" class="hover:text-primary hover-scale">项目</a>
@@ -400,6 +413,7 @@
             <a href="#about" class="btn-blue text-sm hover-scale">联系我</a>
         </header>
 
+        <!-- 首页Hero区域 -->
         <section class="wrap py-14 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="text-center space-y-7 hover-scale">
                 <div class="avatar-wrap mx-auto">
@@ -491,6 +505,7 @@
             </div>
         </section>
 
+        <!-- 博客文章区域 -->
         <main class="wrap grid grid-cols-1 lg:grid-cols-4 gap-8 py-10" id="article">
             <div class="lg:col-span-3 space-y-6">
                 <h2 class="text-2xl font-bold border-l-4 border-primary pl-4">最新文章</h2>
@@ -550,6 +565,7 @@
                     </div>
                 </div>
             </div>
+            <!-- 侧边栏 -->
             <div class="lg:col-span-1 space-y-6" id="about">
                 <div class="card-light p-6 text-center hover-scale">
                     <div class="avatar-wrap mx-auto mb-4 w-28 h-28">
@@ -591,6 +607,7 @@
             </div>
         </main>
 
+        <!-- 页脚 -->
         <footer class="wrap glass-bar mb-6 py-6 text-center text-gray-400 text-sm">
             <p>© 2026 飞鸟折白梅 | 极简网格个人博客</p>
             <p class="mt-2">基于Tailwind CSS静态构建 · Cloudflare Pages托管</p>
@@ -598,7 +615,7 @@
     </div>
 
 <script>
-// 顶部实时日期
+// 1. 顶部实时日期自动刷新
 function updateDate(){
     const now = new Date();
     const weekArr = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
@@ -608,13 +625,13 @@ function updateDate(){
     const week = weekArr[now.getDay()];
     const hour = String(now.getHours()).padStart(2,'0');
     const min = String(now.getMinutes()).padStart(2,'0');
-    const timeStr = `${year}年${month}日 ${week} ${hour}:${min}`;
+    const timeStr = `${year}年${month}月${day}日 ${week} ${hour}:${min}`;
     document.getElementById('dateBox').innerText = timeStr;
 }
 updateDate();
 setInterval(updateDate,1000);
 
-// 爱心鼠标特效
+// 2. 粉色跳动爱心鼠标粒子特效（修复透明画布无白屏）
 const canvas = document.getElementById('heartCanvas');
 const ctx = canvas.getContext('2d');
 function resizeCanvas() {
@@ -659,7 +676,7 @@ class HeartParticle {
         ctx.translate(this.x,this.y);
         ctx.scale(this.size, this.size);
         ctx.beginPath();
-        ctx.moveTo(heartVertex[0].x, heartVertex[0]);
+        ctx.moveTo(heartVertex[0].x, heartVertex[0].y);
         for (let i = 1; i < heartPrecision; i++) {
             ctx.lineTo(heartVertex[i].x, heartVertex[i].y);
         }
@@ -694,7 +711,7 @@ function renderLoop() {
 }
 renderLoop();
 
-// ========== 音乐播放器（Meting公益跨域API，可搜索网易云） ==========
+// 3. ffapi QQ音乐播放器核心逻辑（适配你提供的接口参数&返回结构）
 const audio = document.getElementById('audioPlayer');
 const playBtn = document.getElementById('playBtn');
 const miniBtn = document.getElementById('miniBtn');
@@ -702,27 +719,28 @@ const panel = document.getElementById('musicPanel');
 const progressWrap = document.getElementById('progressWrap');
 const progressBar = document.getElementById('progressBar');
 const currentTimeDom = document.getElementById('currentTime');
-const totalTimeDom = document.getElementById('prevBtn');
+const totalTimeDom = document.getElementById('totalTime');
+const titleDom = document.getElementById('musicTitle');
+const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 const songListDom = document.getElementById('songList');
-const titleDom = document.getElementById('musicTitle');
 
 let playList = [];
-let currentIndex = 0;
-// 内置默认歌曲
-const defaultList = [
-    {name:"晚风纯音乐",url:"https://music.163.com/song/media/outer/url?id=1334870365"},
-    {name:"春日温柔钢琴曲",url:"https://music.163.com/song/media/outer/url?id=1884447702"}
+let currentMusicIndex = 0;
+// 内置兜底歌曲（无网络可播放）
+const localBackup = [
+    { name: "晚风纯音乐", url: "https://music.163.com/song/media/outer/url?id=1334870365.mp3" },
+    { name: "春日温柔钢琴曲", url: "https://music.163.com/song/media/outer/url?id=1884447702.mp3" }
 ];
-playList = [...defaultList];
+playList = [...localBackup];
 
-// 展开收起面板
-miniBtn.onclick = ()=>panel.classList.toggle('show');
+// 展开/收起播放器面板
+miniBtn.onclick = ()=> panel.classList.toggle('show');
 
-// 播放暂停
-playBtn.onclick = async ()=>{
+// 修复播放暂停异步逻辑
+playBtn.onclick = async function(){
     if(audio.paused || audio.ended){
         audio.muted = false;
         await audio.play();
@@ -731,117 +749,140 @@ playBtn.onclick = async ()=>{
         audio.pause();
         playBtn.className = "fas fa-play music-btn music-play-main";
     }
-}
+};
 
 // 上一曲
 prevBtn.onclick = ()=>{
     if(playList.length === 0) return;
-    currentIndex--;
-    if(currentIndex <0) currentIndex = playList.length-1;
-    loadMusic(playList[currentIndex]);
+    currentMusicIndex--;
+    if(currentMusicIndex < 0) currentMusicIndex = playList.length - 1;
+    loadAudio(playList[currentMusicIndex]);
     audio.play();
     playBtn.className = "fas fa-pause music-btn music-play-main";
-}
+};
 // 下一曲
 nextBtn.onclick = ()=>{
     if(playList.length === 0) return;
-    currentIndex++;
-    if(currentIndex >= playList.length) currentIndex = 0;
-    loadMusic(playList[currentIndex]);
-    audio.play();
-    playBtn.className = "fas fa-pause music-play-main";
-}
-
-// 加载音乐
-function loadMusic(item){
-    audio.src = item.url;
-    titleDom.innerText = item.name;
-    audio.load();
-}
-// 格式化时间
-function formatTime(s){
-    if(isNaN(s)) return "00:00";
-    let m = Math.floor(s/60);
-    let sec = Math.floor(s%60);
-    return String(m).padStart(2)+":"+String(sec).padStart(2);
-}
-// 进度更新
-audio.ontimeupdate = ()=>{
-    if(audio.duration){
-        let per = (audio.currentTime / audio.duration)*100;
-        progressBar.style.width = per+"%";
-        currentTimeDom.innerText = formatTime(audio.currentTime);
-    }
-}
-audio.onloadedmetadata = ()=> totalTimeDom.innerText = formatTime(audio.duration);
-// 点击进度跳转
-progressWrap.onclick = (e)=>{
-    if(!audio.duration) return;
-    let rect = progressWrap.getBoundingClientRect();
-    let p = (e.clientX - rect.left)/rect.width;
-    audio.currentTime = p * audio.duration;
-}
-// 播放结束自动下一曲
-audio.onended = ()=>{
-    currentIndex++;
-    if(currentIndex >= playList.length) currentIndex=0;
-    loadMusic(playList[currentIndex]);
+    currentMusicIndex++;
+    if(currentMusicIndex >= playList.length) currentMusicIndex = 0;
+    loadAudio(playList[currentMusicIndex]);
     audio.play();
     playBtn.className = "fas fa-pause music-btn music-play-main";
+};
+
+// 加载音频资源
+function loadAudio(song){
+    audio.src = song.url;
+    titleDom.innerText = song.name;
+    audio.load();
+}
+loadAudio(playList[0]);
+
+// 时分秒格式化
+function formatTime(sec){
+    if(isNaN(sec)) return "00:00";
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
 }
 
-// 搜索功能 Meting公益接口（支持跨域前端直接调用）
-async function searchMusic(keyword){
-    // 公益可用Meting api，无CORS拦截
-    const api = `https://api.injahow.cn/meting/?server=netease&type=search&keywords=${encodeURIComponent(keyword)}`;
-    const res = await fetch(api);
-    const data = await res.json();
-    return data.list || [];
+// 进度条实时更新
+audio.ontimeupdate = ()=>{
+    if(audio.duration){
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progressBar.style.width = percent + "%";
+        currentTimeDom.innerText = formatTime(audio.currentTime);
+    }
+};
+audio.onloadedmetadata = ()=> totalTimeDom.innerText = formatTime(audio.duration);
+
+// 点击进度条跳转播放位置
+progressWrap.onclick = (e)=>{
+    if(!audio.duration) return;
+    const rect = progressWrap.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pct * audio.duration;
+};
+
+// 播放结束自动切下一首
+audio.onended = ()=>{
+    currentMusicIndex++;
+    if(currentMusicIndex >= playList.length) currentMusicIndex = 0;
+    loadAudio(playList[currentMusicIndex]);
+    audio.play();
+    playBtn.className = "fas fa-pause music-btn music-play-main";
+};
+
+// ================= ffapi QQ音乐搜索接口 =================
+async function searchQQMusic(keyword){
+    // 接口地址：https://ffapi.cn/int/v1/dg_qqmusic
+    const apiUrl = `https://ffapi.cn/int/v1/dg_qqmusic?msg=${encodeURIComponent(keyword)}&act=search&format=json&limit=10`;
+    try{
+        const res = await fetch(apiUrl);
+        const json = await res.json();
+        if(json.code === 200 && json.data?.length > 0){
+            return json.data;
+        }
+        return [];
+    }catch(err){
+        alert("接口请求失败，请稍后重试");
+        console.error(err);
+        return [];
+    }
+}
+// 根据n序号获取播放链接
+async function getMusicUrl(n, keyword){
+    const apiUrl = `https://ffapi.cn/int/v1/dg_qqmusic?msg=${encodeURIComponent(keyword)}&act=musicurl&n=${n}&format=json`;
+    const res = await fetch(apiUrl);
+    const json = await res.json();
+    return json.url || null;
 }
 // 渲染搜索列表
-async function renderSearch(){
+async function renderSearchList(){
     const kw = searchInput.value.trim();
-    if(!kw) return alert("输入歌曲名称");
-    songListDom.innerHTML = "<div class='text-center py-3 text-sm'>搜索中...</div>";
-    const songs = await searchMusic(kw);
+    if(!kw) return alert("请输入歌曲/歌手名称");
+    songListDom.innerHTML = `<li style="text-align:center;padding:10px;color:#666;">搜索中...</li>`;
+    const songData = await searchQQMusic(kw);
     songListDom.innerHTML = "";
     playList = [];
-    if(songs.length === 0){
-        songListDom.innerHTML = "<div class='text-center py-3 text-gray-400'>无结果</div>";
+    if(songData.length === 0){
+        songListDom.innerHTML = `<li style="text-align:center;padding:10px;color:#999;">未找到匹配歌曲</li>`;
         return;
     }
-    songs.forEach(s=>{
-        const item = {
-            name: s.name+" - "+s.artist,
-            url: s.url
-        }
-        playList.push(item);
-        const div = document.createElement('div');
-        div.className = "song-item";
-        div.innerHTML = `<span>${item.name}</span><i class="fa fa-play text-xs text-gray-400"></i>`;
-        div.onclick = ()=>{
-            currentIndex = playList.findIndex(x=>x.url === item.url);
-            loadMusic(item);
+    // 循环渲染列表
+    for(const item of songData){
+        const songName = `${item.title} - ${item.singer}`;
+        const li = document.createElement('li');
+        li.className = "song-item";
+        li.innerHTML = `<span>${songName}</span><i class="fas fa-play text-xs text-gray-400"></i>`;
+        li.onclick = async ()=>{
+            // 点击拉取播放地址
+            const playUrl = await getMusicUrl(item.n, kw);
+            if(!playUrl) return alert("该歌曲暂无播放源");
+            const playItem = { name:songName, url:playUrl };
+            playList.push(playItem);
+            currentMusicIndex = playList.length - 1;
+            loadAudio(playItem);
             audio.play();
             playBtn.className = "fas fa-pause music-btn music-play-main";
-        }
-        songListDom.appendChild(div);
-    })
-}
-searchBtn.onclick = renderSearch;
-searchInput.onkeydown = (e)=>{
-    if(e.key === 'Enter') renderSearch();
-}
-// 默认加载第一首
-loadMusic(playList[0]);
-
-// 平滑滚动
-document.querySelectorAll('a[href^="#"]').forEach(link=>{
-    link.onclick = e=>{
-        e.preventDefault();
-        document.querySelector(link.getAttribute('href')).scrollIntoView({behavior:"smooth"});
+        };
+        songListDom.appendChild(li);
     }
-})
+}
+// 搜索按钮点击
+searchBtn.onclick = renderSearchList;
+// 回车触发搜索
+searchInput.onkeydown = (e)=>{
+    if(e.key === 'Enter') renderSearchList();
+};
+
+// 页面内锚点平滑滚动
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.onclick = (e) => {
+        e.preventDefault();
+        document.querySelector(link.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+    };
+});
 </script>
 </body>
 </html>
