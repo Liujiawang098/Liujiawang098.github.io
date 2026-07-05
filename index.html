@@ -1,15 +1,180 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>我的个人网站</title>
-    <style>
-        body{text-align:center;margin-top:100px;font-size:22px;background:#f0f8ff;}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YuHuan | 个人主页</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+mainBlue: '#2563eb',
+glassBg: 'rgba(255,255,255,0.7)',
+},
+fontFamily: {
+code: ['Consolas','Monaco','monospace'],
+}
+}
+}
+}
+</script>
+<style>
+/* 网格背景 + 浅色几何装饰 */
+body {
+background-color: #ffffff;
+background-image: 
+radial-gradient(#e6edf7 1px, transparent 1px),
+radial-gradient(#eef3fc 1px, transparent 1px);
+background-size: 36px 36px;
+background-position: 0 0,18px 18px;
+position: relative;
+overflow-x: hidden;
+}
+/* 页面淡蓝色几何装饰 */
+body::before{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:0;
+background-image:
+circle 120px at 8% 8%,
+square 100px at 42% 26%,
+square 140px at 45% 62%;
+background-repeat:no-repeat;
+background-size:contain;
+background-position:8% 8%,42% 26%,45% 62%;
+background-image:
+radial-gradient(#cce0ff 120px, transparent 120px),
+linear-gradient(45deg,#e0ecff 100%,transparent 100%),
+linear-gradient(45deg,#e8f1ff 100%,transparent 100%);
+opacity:0.4;
+z-index:-1;
+}
+/* 毛玻璃卡片 */
+.card-glass {
+background: rgba(255,255,255,0.72);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(220,230,245,0.6);
+border-radius: 16px;
+box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+}
+/* 终端窗口三色圆点 */
+.dot-red{background:#ff5c57;}
+.dot-yellow{background:#ffbd2e;}
+.dot-green{background:#28c940;}
+</style>
 </head>
-<body>
-    <h1>欢迎来到我的个人主页</h1>
-    <p>本站由 Cloudflare Pages + GitHub 免费搭建</p>
-    <p>永久免费、不限流量、安全加密访问</p>
+<body class="min-h-screen flex items-center justify-center p-6 md:p-12">
+<div class="max-w-7xl w-full grid md:grid-cols-2 gap-10 items-center">
+<!-- 左侧个人信息区域 -->
+<div class="flex flex-col items-center md:items-start">
+<!-- 头像 -->
+<div class="relative w-36 h-36 rounded-full overflow-hidden border-2 border-mainBlue shadow-md mb-5">
+<img src="https://picsum.photos/id/1000/300/300" alt="头像" class="w-full h-full object-cover">
+<span class="absolute bottom-1 right-2 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></span>
+</div>
+
+<!-- 昵称与简介 -->
+<h1 class="text-4xl font-bold text-slate-800">YuHuan</h1>
+<p class="text-slate-500 mt-2 text-center md:text-left">热爱编程与设计的创作者</p>
+<p class="text-slate-400 text-sm mt-1">星轨工作室室长</p>
+<span class="mt-5 inline-block border border-mainBlue text-mainBlue px-6 py-1.5 rounded-full">全栈开发者</span>
+
+<!-- 标语 -->
+<p class="text-2xl text-slate-700 my-8 text-center md:text-left">创造美观且高性能的数字产品</p>
+
+<!-- 数据统计行 -->
+<div class="flex gap-8 mb-8">
+<div class="text-center">
+<p class="text-4xl font-bold text-mainBlue">4</p>
+<p class="text-slate-400 text-sm mt-1">年经验</p>
+</div>
+<div class="text-center">
+<p class="text-4xl font-bold text-mainBlue">16</p>
+<p class="text-slate-400 text-sm mt-1">个项目</p>
+</div>
+<div class="text-center">
+<p class="text-4xl font-bold text-mainBlue">100</p>
+<p class="text-slate-400 text-sm mt-1">% 热情</p>
+</div>
+</div>
+
+<!-- 功能按钮 -->
+<div class="flex gap-5 mb-7">
+<a href="#" class="bg-mainBlue text-white px-9 py-3 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-all shadow-sm">
+查看作品 <i class="fa fa-arrow-right"></i>
+</a>
+<a href="#" class="card-glass px-9 py-3 rounded-lg flex items-center gap-2 hover:shadow-md transition-all">
+联系我 <i class="fa fa-envelope-o"></i>
+</a>
+</div>
+
+<!-- 社交按钮组 -->
+<div class="flex gap-4">
+<a href="#" class="card-glass px-5 py-2.5 rounded-lg flex items-center gap-2 text-sm">
+<i class="fa fa-github"></i> GitHub
+</a>
+<a href="#" class="card-glass px-5 py-2.5 rounded-lg flex items-center gap-2 text-sm">
+<i class="fa fa-qq"></i> QQ
+</a>
+<a href="#" class="card-glass px-5 py-2.5 rounded-lg flex items-center gap-2 text-sm">
+<i class="fa fa-comment"></i> discord
+</a>
+</div>
+</div>
+
+<!-- 右侧终端卡片组 -->
+<div class="flex flex-col gap-6">
+<!-- 卡片1：项目监控站 -->
+<div class="card-glass p-6">
+<p class="font-code text-slate-600">$ cat server-status.txt</p>
+<div class="mt-4">
+<p class="font-medium text-slate-800">星轨服务监控站</p>
+<p class="text-slate-400 text-sm mt-1">StarOrbit 服务监控站 开源免费、界面精美</p>
+<a href="https://status.317188.xyz" class="text-mainBlue mt-3 inline-block">→ https://status.317188.xyz</a>
+</div>
+</div>
+
+<!-- 卡片2：联系方式终端 -->
+<div class="card-glass overflow-hidden">
+<!-- 终端顶部栏 -->
+<div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200">
+<span class="w-3 h-3 rounded-full dot-red"></span>
+<span class="w-3 h-3 rounded-full dot-yellow"></span>
+<span class="w-3 h-3 rounded-full dot-green"></span>
+<span class="ml-2 text-xs text-slate-400">me</span>
+</div>
+<div class="p-6 font-code text-sm">
+<p class="text-slate-600">$ cat me.txt</p>
+<div class="mt-4 space-y-3">
+<p class="text-slate-700">💬 QQ联系方式</p>
+<p class="text-slate-400 text-xs">期待与各位技术大佬一起交流学习</p>
+<div class="bg-slate-100 w-fit px-3 py-2 rounded text-slate-800">QQ号：3171882051</div>
+</div>
+</div>
+</div>
+
+<!-- 卡片3：开发版本终端 -->
+<div class="card-glass overflow-hidden">
+<div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200">
+<span class="w-3 h-3 rounded-full dot-red"></span>
+<span class="w-3 h-3 rounded-full dot-yellow"></span>
+<span class="w-3 h-3 rounded-full dot-green"></span>
+<span class="ml-2 text-xs text-slate-400">dev-status</span>
+</div>
+<div class="p-6 font-code text-sm text-slate-600 space-y-1.5">
+<p>$ code --version</p>
+<p class="mt-2 text-slate-700">1.84.2</p>
+<p>commit 1a5daa3a0231a0fbba4f14db7ec463cf99d7768e</p>
+<p>Date: 2024-01-15T10:29:31.316Z</p>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>
