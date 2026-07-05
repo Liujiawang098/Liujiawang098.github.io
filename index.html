@@ -41,6 +41,17 @@
             color: #1a1a1a;
             overflow-x: hidden;
             line-height: 1.7;
+            position: relative;
+        }
+        /* 樱花层层级控制，低于页面内容、高于爱心画布 */
+        #bgFlowerLayer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 5;
         }
         #heartCanvas {
             position: fixed;
@@ -220,7 +231,7 @@
         .hover-scale {
             cursor: none;
         }
-        /* 音乐播放器 修复列表变黄样式 */
+        /* 音乐播放器 重置列表黄色样式 */
         .music-box {
             position: fixed;
             bottom: 24px;
@@ -276,7 +287,6 @@
             padding:0 12px;
             cursor:pointer;
         }
-        /* 强制重置歌曲列表，清除黄色默认样式 */
         .song-list {
             max-height:140px;
             overflow-y:auto;
@@ -347,7 +357,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        /* 顶部实时日期栏 */
+        /* 顶部日期栏 */
         .date-bar {
             text-align:center;
             padding:8px 0;
@@ -356,7 +366,9 @@
         }
     </style>
 </head>
-<body class="relative">
+<body>
+    <!-- 樱花飘落层 -->
+    <div id="bgFlowerLayer"></div>
     <!-- 底层网格背景 -->
     <div class="hero-bg">
         <div class="grid-lines"></div>
@@ -614,6 +626,10 @@
         </footer>
     </div>
 
+    <!-- 樱花花瓣背景JS 按文档引入jQuery + bg_flower -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ffapi.cn/int/v1/bg_flower?act=demo"></script>
+
 <script>
 // 1. 顶部实时日期自动刷新
 function updateDate(){
@@ -711,7 +727,7 @@ function renderLoop() {
 }
 renderLoop();
 
-// 3. ffapi QQ音乐播放器核心逻辑（适配你提供的接口参数&返回结构）
+// 3. ffapi QQ音乐播放器 修复搜索无结果提示
 const audio = document.getElementById('audioPlayer');
 const playBtn = document.getElementById('playBtn');
 const miniBtn = document.getElementById('miniBtn');
@@ -813,7 +829,7 @@ audio.onended = ()=>{
     playBtn.className = "fas fa-pause music-btn music-play-main";
 };
 
-// ================= ffapi QQ音乐搜索接口 =================
+// ================= ffapi QQ音乐搜索接口 优化无歌曲提示 =================
 async function searchQQMusic(keyword){
     // 接口地址：https://ffapi.cn/int/v1/dg_qqmusic
     const apiUrl = `https://ffapi.cn/int/v1/dg_qqmusic?msg=${encodeURIComponent(keyword)}&act=search&format=json&limit=10`;
@@ -837,7 +853,7 @@ async function getMusicUrl(n, keyword){
     const json = await res.json();
     return json.url || null;
 }
-// 渲染搜索列表
+// 渲染搜索列表（修复未找到歌曲提示）
 async function renderSearchList(){
     const kw = searchInput.value.trim();
     if(!kw) return alert("请输入歌曲/歌手名称");
@@ -845,8 +861,9 @@ async function renderSearchList(){
     const songData = await searchQQMusic(kw);
     songListDom.innerHTML = "";
     playList = [];
+    // 优化：未找到歌曲清晰提示
     if(songData.length === 0){
-        songListDom.innerHTML = `<li style="text-align:center;padding:10px;color:#999;">未找到匹配歌曲</li>`;
+        songListDom.innerHTML = `<li style="text-align:center;padding:10px;color:#999;">未找到匹配歌曲，请更换关键词</li>`;
         return;
     }
     // 循环渲染列表
