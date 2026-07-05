@@ -6,7 +6,6 @@
     <meta name="baidu-site-verification" content="codeva-NZ7P0Fsakr" />
     <title>飞鸟折白梅 | 个人技术博客</title>
     <link rel="icon" type="image/png" href="img/tx.jpg">
-    <!-- 国内稳定CDN 解决白屏加载慢 -->
     <script src="https://cdn.bootcdn.net/ajax/libs/tailwindcss/3.3.2/tailwind.min.js"></script>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -15,10 +14,6 @@
                 extend: {
                     colors: {
                         primary: '#2563eb',
-                        accent1: '#2563eb',
-                        accent2: '#3b82f6',
-                        accent3: '#1d4ed8',
-                        glassBg: 'rgba(255,255,255,0.72)',
                     },
                     fontFamily: {
                         mono: ['Consolas', 'Menlo', 'monospace'],
@@ -43,12 +38,11 @@
             color: #1a1a1a;
             overflow-x: hidden;
             line-height: 1.7;
-            /* 全局居中容器基准 */
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        /* ========== 原版鼠标光标特效 完整恢复 ========== */
+        /* 双层鼠标光标特效 */
         .cursor-outer {
             position: fixed;
             width: 40px;
@@ -70,245 +64,297 @@
             z-index: 9999;
             transform: translate(-50%, -50%);
         }
-        /* 鼠标悬浮放大效果 */
         .hover-scale .cursor-outer {
             transform: translate(-50%, -50%) scale(1.6);
             opacity: 0.3;
         }
-        /* ========== 原版动态背景 全部保留 ========== */
+        /* 极简浅网格背景 */
         .hero-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.35;
+            opacity: 0.4;
             pointer-events: none;
             z-index: 0;
         }
         .grid-lines {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            background-image: linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg,#e5e7eb 1px,transparent 1px);
-            background-size: 60px 60px;
+            background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg,#e2e8f0 1px,transparent 1px);
+            background-size: 48px 48px;
             animation: gridMove 25s linear infinite;
-            opacity: 0.6;
         }
-        @keyframes gridMove {0%{transform:translate(0,0)}100%{transform:translate(60px,60px)}}
-        .geo-shape {
-            position:absolute;border:1px solid rgba(37,99,235,0.2);animation:shapeMorph 8s ease-in-out infinite
+        @keyframes gridMove {0%{transform:translate(0,0)}100%{transform:translate(48px,48px)}}
+        /* 散点装饰 */
+        .dot-deco {
+            position: absolute;
+            border-radius: 50%;
+            background: #2563eb;
+            opacity: 0.35;
         }
-        .geo-shape:nth-child(1){top:25%;left:25%;width:100px;height:100px;border-radius:20px}
-        .geo-shape:nth-child(2){top:25%;right:25%;width:80px;height:80px;border-radius:50%;animation-delay:2s}
-        .geo-shape:nth-child(3){bottom:25%;left:25%;width:60px;height:60px;transform:rotate(45deg);animation-delay:4s}
-        .geo-shape:nth-child(4){bottom:25%;right:25%;width:90px;height:90px;border-radius:30px;animation-delay:6s}
-        @keyframes shapeMorph {0%,100%{transform:scale(1) rotate(0deg);opacity:0.3}25%{transform:scale(1.2) rotate(90deg);opacity:0.6}50%{transform:scale(0.8) rotate(180deg);opacity:0.8}75%{transform:scale(1.1) rotate(270deg);opacity:0.5}}
-        .flowing-line {
-            position:absolute;height:2px;background:linear-gradient(90deg,transparent,#2563eb,transparent);animation:flow 12s linear infinite;opacity:0.7;box-shadow:0 0 10px rgba(37,99,235,0.3)
+        .dot1 {width:6px;height:6px;top:8%;left:10%}
+        .dot2 {width:8px;height:8px;top:22%;right:18%}
+        .dot3 {width:5px;height:5px;bottom:15%;left:45%}
+        /* 头像外圈淡蓝光晕（截图同款） */
+        .avatar-wrap {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.08);
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .flowing-line:nth-child(1){top:20%;width:200px}
-        .flowing-line:nth-child(2){top:40%;width:300px;animation-delay:3s}
-        .flowing-line:nth-child(3){top:60%;width:150px;animation-delay:6s}
-        .flowing-line:nth-child(4){top:80%;width:250px;animation-delay:9s}
-        @keyframes flow {0%{left:-300px;opacity:0}10%,90%{opacity:0.4}100%{left:100%;opacity:0}}
-        .star {
-            position:absolute;width:4px;height:4px;background:#2563eb;border-radius:50%;animation:twinkle 3s ease-in-out infinite;box-shadow:0 0 15px #2563eb
-        }
-        .star:nth-child(1){top:10%;left:20%}
-        .star:nth-child(2){top:20%;left:80%;animation-delay:0.5s}
-        .star:nth-child(3){top:60%;left:10%;animation-delay:1s}
-        .star:nth-child(4){top:80%;left:70%;animation-delay:1.5s}
-        .star:nth-child(5){top:30%;left:60%;animation-delay:2s}
-        .star:nth-child(6){top:70%;left:30%;animation-delay:2.5s}
-        @keyframes twinkle {0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(2)}}
-        .orb {
-            position:absolute;border-radius:50%;filter:blur(40px);animation:floatGlow 10s ease-in-out infinite
-        }
-        .orb-1{top:10%;left:10%;width:250px;height:250px;background:radial-gradient(circle,rgba(37,99,235,0.2) 0%,transparent 70%)}
-        .orb-2{top:60%;right:10%;width:200px;height:200px;background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 70%);animation-delay:3s}
-        .orb-3{bottom:20%;left:30%;width:150px;height:150px;background:radial-gradient(circle,rgba(29,78,216,0.12) 0%,transparent 70%);animation-delay:6s}
-        @keyframes floatGlow {0%,100%{transform:translate(0,0) scale(1);opacity:0.8}33%{transform:translate(30px,-20px) scale(1.1);opacity:1}66%{transform:translate(-20px,30px) scale(0.9);opacity:0.6}}
-        /* ========== UI卡片样式（截图同款轻玻璃） ========== */
-        .glass {
-            background: rgba(255,255,255,0.72);backdrop-filter:blur(10px);border:1px solid rgba(220,230,245,0.6);border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,0.04)
-        }
-        .glass-soft {
-            background: rgba(255,255,255,0.86);border:1px solid #e5e7eb;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.06);
-        }
-        .dot-red{background:#ff5f57}.dot-yellow{background:#ffbd2e}.dot-green{background:#28c840}
         .avatar-frame {
-            width:84px;height:84px;border-radius:50%;border:3px solid #f1f3f4;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.08);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
         }
-        .avatar-frame img {width:100%;height:100%;object-fit:cover}
-        .terminal-card {transition:0.3s ease;min-height:210px}
-        .terminal-card:hover {transform:translateY(-6px);box-shadow:0 18px 45px rgba(0,0,0,0.12);border-color:#2563eb}
-        .terminal-header {
-            background:#f8f9fa;padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #e5e7eb;border-radius:18px 18px 0 0;
+        .avatar-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
-        .terminal-body {padding:18px;font-family:var(--font-mono);font-size:14px;line-height:1.8}
-        .blog-card {transition:0.3s ease}
-        .blog-card:hover {transform:translateY(-6px);box-shadow:0 18px 45px rgba(0,0,0,0.08);border-color:#2563eb}
-        .tag {background:rgba(37,99,235,0.08);color:#2563eb;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:500}
-        .sidebar-link {transition:0.2s ease}
-        .sidebar-link:hover {background:rgba(37,99,235,0.08);padding-left:12px;color:#2563eb}
-        .page-btn {transition:0.2s ease}
-        .page-btn:hover:not(.disabled) {background:#2563eb;color:#fff}
-        .page-btn.disabled {opacity:0.4;cursor:not-allowed}
-        .btn-primary {background:#2563eb;color:white;transition:0.2s ease}
-        .btn-primary:hover {background:#1d4ed8;transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,99,235,0.25)}
-        .btn-secondary {background:#f1f3f4;color:#1a1a1a;transition:0.2s ease}
-        .btn-secondary:hover {background:#e5e7eb;transform:translateY(-2px)}
-        .social-btn {
-            width:40px;height:40px;border-radius:12px;background:#f1f3f4;color:#4a4a4a;display:flex;align-items:center;justify-content:center;transition:0.2s ease;
+        .online-dot {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 22px;
+            height: 22px;
+            background: #22c55e;
+            border-radius: 50%;
+            border: 3px solid white;
         }
-        .social-btn:hover {background:#2563eb;color:white;transform:translateY(-3px)}
-        .stat-number {
-            font-size:28px;font-weight:800;background:linear-gradient(135deg,#2563eb,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+        /* 空心边框标签按钮 */
+        .tag-outline {
+            border: 1.5px solid #2563eb;
+            color: #2563eb;
+            border-radius: 999px;
+            padding: 10px 32px;
+            font-size: 16px;
+            background: transparent;
         }
-        .divider {width:1px;height:40px;background:linear-gradient(to bottom,transparent,#e5e7eb,transparent)}
-        /* ========== 全局容器强制居中 ========== */
-        .container-full {
-            width: min(100% - 48px, 1280px);
+        /* 统计数字样式 */
+        .stat-num {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .stat-divider {
+            width: 1px;
+            height: 50px;
+            background: #e2e8f0;
+        }
+        /* 终端卡片轻玻璃 */
+        .card-light {
+            background: rgba(255,255,255,0.9);
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.04);
+            transition: 0.3s;
+        }
+        .card-light:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 36px rgba(37,99,235,0.08);
+        }
+        .terminal-head {
+            background: #f8fafc;
+            padding: 14px 20px;
+            border-radius: 20px 20px 0 0;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .dot-r {width:12px;height:12px;border-radius:50%;background:#ff5f57}
+        .dot-y {width:12px;height:12px;border-radius:50%;background:#ffbd2e}
+        .dot-g {width:12px;height:12px;border-radius:50%;background:#28c840}
+        .terminal-body {
+            padding: 20px;
+            font-family: Consolas,monospace;
+            font-size: 14px;
+        }
+        /* 全局容器居中 */
+        .wrap {
+            width: min(100% - 40px, 1240px);
             margin: 0 auto;
             position: relative;
             z-index: 10;
         }
-        section, header, main, footer {
-            width: min(100% - 48px, 1280px);
-            margin: 0 auto;
+        /* 导航/页脚玻璃 */
+        .glass-bar {
+            background: rgba(255,255,255,0.85);
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.03);
         }
-        @media (max-width: 768px) {
-            .hero-bg {position:fixed}
+        .btn-blue {
+            background: #2563eb;
+            color: white;
+            border-radius: 12px;
+            padding: 12px 30px;
+            transition: 0.2s;
+        }
+        .btn-blue:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37,99,235,0.2);
+        }
+        .btn-gray {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 12px 30px;
+            transition: 0.2s;
+        }
+        .btn-gray:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        .social-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #f1f5f9;
+            display: grid;
+            place-items: center;
+            transition: 0.2s;
+        }
+        .social-icon:hover {
+            background: #2563eb;
+            color: white;
+            transform: translateY(-3px);
+        }
+        .tag-sm {
+            background: rgba(37,99,235,0.08);
+            color: #2563eb;
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-size: 12px;
         }
     </style>
 </head>
-<body class="relative z-10">
-    <!-- 鼠标特效DOM 恢复 -->
+<body class="relative">
+    <!-- 鼠标跟随 -->
     <div class="cursor-outer"></div>
     <div class="cursor-inner"></div>
-    <!-- 全局动态背景 -->
+    <!-- 背景网格+装饰点 -->
     <div class="hero-bg">
         <div class="grid-lines"></div>
-        <div class="geo-shape"></div><div class="geo-shape"></div><div class="geo-shape"></div><div class="geo-shape"></div>
-        <div class="flowing-line"></div><div class="flowing-line"></div><div class="flowing-line"></div><div class="flowing-line"></div>
-        <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
-        <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+        <div class="dot-deco dot1"></div>
+        <div class="dot-deco dot2"></div>
+        <div class="dot-deco dot3"></div>
     </div>
 
-    <!-- 导航栏 居中容器 -->
-    <header class="glass-soft sticky top-0 z-20 mt-6 px-6 py-4 flex justify-between items-center hover-scale">
+    <!-- 导航栏 -->
+    <header class="wrap glass-bar sticky top-0 mt-6 px-6 py-4 flex justify-between items-center hover-scale">
         <a href="#" class="text-xl font-bold text-gray-800 flex items-center gap-2">
-            <i class="fa fa-feather text-primary"></i>
-            <span>飞鸟折白梅</span>
+            <i class="fa fa-feather text-primary"></i>飞鸟折白梅
         </a>
-        <nav class="hidden md:flex gap-6 text-gray-600 text-sm">
-            <a href="#" class="text-primary font-medium flex items-center gap-1 hover-scale"><i class="fa fa-home"></i> 首页</a>
-            <a href="#article" class="flex items-center gap-1 hover:text-primary transition-colors hover-scale"><i class="fa fa-book"></i> 文章</a>
-            <a href="#project" class="flex items-center gap-1 hover:text-primary transition-colors hover-scale"><i class="fa fa-code-fork"></i> 项目</a>
-            <a href="#about" class="flex items-center gap-1 hover:text-primary transition-colors hover-scale"><i class="fa fa-user"></i> 关于</a>
+        <nav class="hidden md:flex gap-7 text-gray-600 text-sm">
+            <a href="#" class="text-primary font-medium hover-scale">首页</a>
+            <a href="#article" class="hover:text-primary hover-scale">文章</a>
+            <a href="#project" class="hover:text-primary hover-scale">项目</a>
+            <a href="#about" class="hover:text-primary hover-scale">关于</a>
         </nav>
-        <div class="flex items-center gap-3">
-            <input type="text" placeholder="搜索文章..." class="glass px-3 py-1.5 text-sm w-44 hidden lg:block outline-none">
-            <a href="#about" class="btn-primary px-4 py-1.5 rounded-lg text-sm font-medium hover-scale">联系我</a>
-        </div>
+        <a href="#about" class="btn-blue text-sm hover-scale">联系我</a>
     </header>
 
-    <!-- 首页Hero区域 完全居中布局（截图左右分栏） -->
-    <section class="py-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-        <!-- 左侧个人信息 -->
-        <div class="space-y-6 text-center lg:text-left">
-            <div class="flex flex-col items-center lg:items-start gap-4 hover-scale">
-                <div class="avatar-frame relative">
+    <!-- 首页Hero 左右分栏，左侧完全居中对齐截图样式 -->
+    <section class="wrap py-14 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <!-- 左侧 完全复刻截图UI -->
+        <div class="text-center space-y-7 hover-scale">
+            <div class="avatar-wrap mx-auto">
+                <div class="avatar-frame">
                     <img src="img/tx.jpg" alt="飞鸟折白梅" loading="lazy">
-                    <span class="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></span>
+                    <span class="online-dot"></span>
                 </div>
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-800">飞鸟折白梅</h1>
-                    <p class="text-gray-500 mt-1">热爱编程与设计的创作者 · 星轨工作室室长</p>
-                </div>
-                <span class="inline-block border border-primary text-primary px-5 py-1.5 rounded-full text-sm font-medium">全栈开发者</span>
             </div>
-            <h2 class="text-xl text-gray-600 font-normal">创造美观且高性能的数字产品</h2>
-            <!-- 统计 -->
-            <div class="flex justify-center lg:justify-start gap-6 items-center">
-                <div class="text-center hover-scale">
-                    <p class="stat-number">4</p>
-                    <p class="text-gray-400 text-xs mt-1">年经验</p>
+            <div>
+                <h1 class="text-4xl font-bold text-primary">飞鸟折白梅</h1>
+                <p class="text-gray-500 mt-2 text-lg">热爱编程与设计的创作者</p>
+                <p class="text-gray-400 mt-1">星轨工作室室长</p>
+            </div>
+            <span class="tag-outline inline-block">全栈开发者</span>
+            <h2 class="text-2xl text-gray-700 font-normal">创造美观且高性能的数字产品</h2>
+            <!-- 统计三栏 -->
+            <div class="flex justify-center items-center gap-6">
+                <div>
+                    <p class="stat-num">4</p>
+                    <p class="text-gray-400 text-sm">年经验</p>
                 </div>
-                <div class="divider"></div>
-                <div class="text-center hover-scale">
-                    <p class="stat-number">16</p>
-                    <p class="text-gray-400 text-xs mt-1">个项目</p>
+                <div class="stat-divider"></div>
+                <div>
+                    <p class="stat-num">16</p>
+                    <p class="text-gray-400 text-sm">个项目</p>
                 </div>
-                <div class="divider"></div>
-                <div class="text-center hover-scale">
-                    <p class="stat-number">100</p>
-                    <p class="text-gray-400 text-xs mt-1">% 热情</p>
+                <div class="stat-divider"></div>
+                <div>
+                    <p class="stat-num">100</p>
+                    <p class="text-gray-400 text-sm">% 热情</p>
                 </div>
             </div>
             <!-- 按钮 -->
-            <div class="flex gap-4 justify-center lg:justify-start">
-                <a href="#article" class="btn-primary px-8 py-3 rounded-lg flex items-center gap-2 font-medium hover-scale">查看文章 <i class="fa fa-arrow-right"></i></a>
-                <a href="#about" class="btn-secondary px-8 py-3 rounded-lg flex items-center gap-2 font-medium hover-scale">联系我 <i class="fa fa-envelope-o"></i></a>
+            <div class="flex justify-center gap-4">
+                <a href="#article" class="btn-blue flex items-center gap-2 hover-scale">查看文章 <i class="fa fa-arrow-right"></i></a>
+                <a href="#about" class="btn-gray flex items-center gap-2 hover-scale">联系我 <i class="fa fa-envelope-o"></i></a>
             </div>
-            <!-- 社交 -->
-            <div class="flex gap-3 justify-center lg:justify-start">
-                <a href="#" class="social-btn hover-scale"><i class="fa fa-github"></i></a>
-                <a href="#" class="social-btn hover-scale"><i class="fa fa-qq"></i></a>
-                <a href="#" class="social-btn hover-scale"><i class="fa fa-comment"></i></a>
+            <!-- 社交图标 -->
+            <div class="flex justify-center gap-3">
+                <a href="#" class="social-icon hover-scale"><i class="fa fa-github"></i></a>
+                <a href="#" class="social-icon hover-scale"><i class="fa fa-qq"></i></a>
+                <a href="#" class="social-icon hover-scale"><i class="fa fa-comment"></i></a>
             </div>
         </div>
-        <!-- 右侧终端卡片（截图原版垂直堆叠） -->
+        <!-- 右侧终端卡片 -->
         <div class="flex flex-col gap-5">
-            <div class="glass-soft terminal-card hover-scale">
-                <div class="terminal-header">
-                    <div class="flex gap-2">
-                        <span class="w-3 h-3 rounded-full dot-red"></span>
-                        <span class="w-3 h-3 rounded-full dot-yellow"></span>
-                        <span class="w-3 h-3 rounded-full dot-green"></span>
-                    </div>
-                    <span class="ml-2 text-xs text-gray-400">server-status</span>
+            <div class="card-light hover-scale">
+                <div class="terminal-head">
+                    <span class="dot-r"></span>
+                    <span class="dot-y"></span>
+                    <span class="dot-g"></span>
+                    <span class="text-xs text-gray-400 ml-2">server-status</span>
                 </div>
-                <div class="terminal-body">
-                    <p class="text-gray-600">$ cat server-status.txt</p>
-                    <div class="mt-4">
-                        <p class="font-medium text-gray-800">星轨服务监控站</p>
+                <div class="terminal-body text-gray-600">
+                    <p>$ cat server-status.txt</p>
+                    <div class="mt-4 text-gray-800">
+                        <p class="font-medium">星轨服务监控站</p>
                         <p class="text-gray-400 text-xs mt-1">StarOrbit 服务监控站 开源免费、界面精美</p>
-                        <a href="https://status.317188.xyz" class="text-primary mt-3 inline-block hover:translate-x-1 transition-all hover-scale">→ https://status.317188.xyz</a>
+                        <a href="https://status.317188.xyz" class="text-primary mt-3 inline-block hover:translate-x-1 transition-all">→ https://status.317188.xyz</a>
                     </div>
                 </div>
             </div>
-            <div class="glass-soft terminal-card hover-scale">
-                <div class="terminal-header">
-                    <div class="flex gap-2">
-                        <span class="w-3 h-3 rounded-full dot-red"></span>
-                        <span class="w-3 h-3 rounded-full dot-yellow"></span>
-                        <span class="w-3 h-3 rounded-full dot-green"></span>
-                    </div>
-                    <span class="ml-2 text-xs text-gray-400">me</span>
+            <div class="card-light hover-scale">
+                <div class="terminal-head">
+                    <span class="dot-r"></span>
+                    <span class="dot-y"></span>
+                    <span class="dot-g"></span>
+                    <span class="text-xs text-gray-400 ml-2">me</span>
                 </div>
-                <div class="terminal-body">
-                    <p class="text-gray-600">$ cat me.txt</p>
+                <div class="terminal-body text-gray-600">
+                    <p>$ cat me.txt</p>
                     <div class="mt-4 space-y-3">
                         <p class="text-gray-700">💬 QQ联系方式</p>
                         <p class="text-gray-400 text-xs">期待与各位技术大佬一起交流学习</p>
-                        <div class="bg-slate-50 w-fit px-3 py-2 rounded text-gray-800 border border-slate-200">QQ号：3171882051</div>
+                        <div class="bg-slate-100 w-fit px-3 py-2 rounded text-gray-800 border border-slate-200">QQ号：3171882051</div>
                     </div>
                 </div>
             </div>
-            <div class="glass-soft terminal-card hover-scale">
-                <div class="terminal-header">
-                    <div class="flex gap-2">
-                        <span class="w-3 h-3 rounded-full dot-red"></span>
-                        <span class="w-3 h-3 rounded-full dot-yellow"></span>
-                        <span class="w-3 h-3 rounded-full dot-green"></span>
-                    </div>
-                    <span class="ml-2 text-xs text-gray-400">dev-status</span>
+            <div class="card-light hover-scale">
+                <div class="terminal-head">
+                    <span class="dot-r"></span>
+                    <span class="dot-y"></span>
+                    <span class="dot-g"></span>
+                    <span class="text-xs text-gray-400 ml-2">dev-status</span>
                 </div>
-                <div class="terminal-body font-mono text-sm text-gray-600 space-y-1.5">
+                <div class="terminal-body text-gray-600 space-y-1.5">
                     <p>$ code --version</p>
                     <p class="mt-2 text-gray-700">1.84.2</p>
                     <p>commit 1a5daa3a0231a0fbba4f14db7ec463cf99d7768e</p>
@@ -318,162 +364,146 @@
         </div>
     </section>
 
-    <!-- 博客主内容区 居中限制宽度 -->
-    <main class="py-10 grid grid-cols-1 lg:grid-cols-4 gap-8" id="article">
-        <!-- 左侧文章列表 3/4 -->
+    <!-- 博客主区域 -->
+    <main class="wrap grid grid-cols-1 lg:grid-cols-4 gap-8 py-10" id="article">
         <div class="lg:col-span-3 space-y-6">
             <h2 class="text-2xl font-bold border-l-4 border-primary pl-4">最新文章</h2>
             <!-- 置顶文章 -->
-            <div class="glass-soft p-6 blog-card border-l-4 border-primary hover-scale">
-                <span class="tag mb-3 inline-block">置顶推荐</span>
+            <div class="card-light p-6 border-l-4 border-primary hover-scale">
+                <span class="tag-sm mb-3 inline-block">置顶推荐</span>
                 <h3 class="text-xl font-bold text-gray-800 hover:text-primary transition-colors mb-2">从零搭建轻量化个人静态博客</h3>
                 <div class="text-gray-400 text-sm flex gap-4 mb-3">
                     <span><i class="fa fa-calendar mr-1"></i> 2026-07-05</span>
                     <span><i class="fa fa-folder mr-1"></i> 前端开发</span>
                     <span><i class="fa fa-eye mr-1"></i> 2143 阅读</span>
                 </div>
-                <p class="text-gray-600 leading-relaxed">使用 Tailwind CSS 搭建纯静态博客，搭配 Cloudflare Pages 免费托管，无需服务器和数据库，国内访问速度优化，自带动态背景与玻璃拟态 UI。</p>
-                <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all hover-scale">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
+                <p class="text-gray-600 leading-relaxed">使用 Tailwind CSS 搭建纯静态博客，搭配 Cloudflare Pages 免费托管，无需服务器和数据库，国内访问速度优化，自带动态网格背景。</p>
+                <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
             </div>
             <!-- 普通文章 -->
-            <div class="glass-soft p-6 blog-card hover-scale">
-                <span class="tag mb-3 inline-block">技术分享</span>
-                <h3 class="text-xl font-bold text-gray-800 hover:text-primary transition-colors mb-2">Tailwind CSS 国内 CDN 优化方案</h3>
+            <div class="card-light p-6 hover-scale">
+                <span class="tag-sm mb-3 inline-block">技术分享</span>
+                <h3 class="text-xl font-bold text-gray-800 hover:text-primary transition-colors mb-2">Tailwind CSS 国内CDN优化方案</h3>
                 <div class="text-gray-400 text-sm flex gap-4 mb-3">
                     <span><i class="fa fa-calendar mr-1"></i> 2026-07-04</span>
                     <span><i class="fa fa-folder mr-1"></i> 前端优化</span>
                     <span><i class="fa fa-eye mr-1"></i> 1567 阅读</span>
                 </div>
-                <p class="text-gray-600">替换谷歌字体、切换稳定 CDN、删除阻塞渲染资源，解决白屏和加载缓慢问题。</p>
-                <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all hover-scale">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
+                <p class="text-gray-600">替换海外字体资源，使用国内稳定CDN，解决页面白屏、加载缓慢问题。</p>
+                <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
             </div>
-            <div class="glass-soft p-6 blog-card hover-scale">
-                <span class="tag mb-3 inline-block">部署教程</span>
+            <div class="card-light p-6 hover-scale">
+                <span class="tag-sm mb-3 inline-block">部署教程</span>
                 <h3 class="text-xl font-bold text-gray-800 hover:text-primary transition-colors mb-2">GitHub Pages + Cloudflare Pages 双平台部署</h3>
                 <div class="text-gray-400 text-sm flex gap-4 mb-3">
                     <span><i class="fa fa-calendar mr-1"></i> 2026-07-02</span>
                     <span><i class="fa fa-folder mr-1"></i> 部署运维</span>
                     <span><i class="fa fa-eye mr-1"></i> 982 阅读</span>
                 </div>
-                <p class="text-gray-600">免费域名、全球 CDN 分发、自定义缓存规则、图片懒加载配置，适合个人博客和项目展示站。</p>
-                <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all hover-scale">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
+                <p class="text-gray-600">免费静态站点托管教程，自定义缓存规则，图片懒加载配置。</p>
+                <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
             </div>
             <!-- 分页 -->
             <div class="flex justify-center gap-2 py-4">
-                <span class="page-btn glass-soft px-4 py-2 rounded-lg disabled">上一页</span>
-                <span class="page-btn glass-soft px-4 py-2 rounded-lg btn-primary">1</span>
-                <span class="page-btn glass-soft px-4 py-2 rounded-lg">2</span>
-                <span class="page-btn glass-soft px-4 py-2 rounded-lg">3</span>
-                <span class="page-btn glass-soft px-4 py-2 rounded-lg">下一页</span>
+                <span class="card-light px-4 py-2 rounded-lg text-gray-400 cursor-not-allowed">上一页</span>
+                <span class="bg-primary text-white px-4 py-2 rounded-lg">1</span>
+                <span class="card-light px-4 py-2 rounded-lg">2</span>
+                <span class="card-light px-4 py-2 rounded-lg">3</span>
+                <span class="card-light px-4 py-2 rounded-lg">下一页</span>
             </div>
             <!-- 项目板块 -->
             <div id="project" class="pt-10">
                 <h2 class="text-2xl font-bold border-l-4 border-primary pl-4 mb-6">开源项目</h2>
                 <div class="grid md:grid-cols-2 gap-6">
-                    <div class="glass-soft p-5 blog-card hover-scale">
+                    <div class="card-light p-5 hover-scale">
                         <h3 class="font-bold text-lg mb-2">StarOrbit 监控面板</h3>
                         <p class="text-gray-500 text-sm mb-3">开源在线服务状态监控页面</p>
-                        <a href="https://status.317188.xyz" class="text-primary text-sm hover-scale">查看演示</a>
+                        <a href="https://status.317188.xyz" class="text-primary text-sm">查看演示</a>
                     </div>
-                    <div class="glass-soft p-5 blog-card hover-scale">
-                        <h3 class="font-bold text-lg mb-2">YuHuan 博客模板</h3>
-                        <p class="text-gray-500 text-sm mb-3">轻量化玻璃拟态静态博客模板</p>
-                        <a href="#" class="text-primary text-sm hover-scale">GitHub 仓库</a>
+                    <div class="card-light p-5 hover-scale">
+                        <h3 class="font-bold text-lg mb-2">轻量化博客模板</h3>
+                        <p class="text-gray-500 text-sm mb-3">极简网格风静态个人主页</p>
+                        <a href="#" class="text-primary text-sm">GitHub仓库</a>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- 右侧侧边栏 1/4 -->
+        <!-- 侧边栏 -->
         <div class="lg:col-span-1 space-y-6" id="about">
-            <!-- 博主信息 -->
-            <div class="glass-soft p-6 text-center hover-scale">
-                <div class="avatar-frame mx-auto mb-4">
-                    <img src="img/tx.jpg" alt="飞鸟折白梅" loading="lazy">
+            <div class="card-light p-6 text-center hover-scale">
+                <div class="avatar-wrap mx-auto mb-4 w-28 h-28">
+                    <div class="avatar-frame">
+                        <img src="img/tx.jpg" alt="飞鸟折白梅" loading="lazy">
+                        <span class="online-dot"></span>
+                    </div>
                 </div>
                 <h3 class="text-xl font-bold">飞鸟折白梅</h3>
                 <p class="text-gray-400 text-sm mt-1">前端开发者 | 开源爱好者</p>
-                <p class="text-gray-600 text-sm my-4">分享前端教程、部署优化、编程随笔，追求简洁美观高性能页面。</p>
+                <p class="text-gray-600 text-sm my-4">分享前端教程、部署优化、编程随笔，追求极简高性能页面。</p>
                 <div class="flex justify-center gap-3">
-                    <a href="#" class="social-btn hover-scale"><i class="fa fa-github"></i></a>
-                    <a href="#" class="social-btn hover-scale"><i class="fa fa-qq"></i></a>
-                    <a href="#" class="social-btn hover-scale"><i class="fa fa-envelope"></i></a>
+                    <a href="#" class="social-icon hover-scale"><i class="fa fa-github"></i></a>
+                    <a href="#" class="social-icon hover-scale"><i class="fa fa-qq"></i></a>
+                    <a href="#" class="social-icon hover-scale"><i class="fa fa-envelope"></i></a>
                 </div>
             </div>
-            <!-- 分类导航 -->
-            <div class="glass-soft p-6 hover-scale">
+            <div class="card-light p-6 hover-scale">
                 <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa fa-list-ul text-primary"></i> 文章分类</h3>
                 <div class="space-y-2 text-sm text-gray-600">
-                    <a href="#" class="sidebar-link block py-1.5 flex justify-between"><span>前端开发</span><span class="text-gray-400">8</span></a>
-                    <a href="#" class="sidebar-link block py-1.5 flex justify-between"><span>前端优化</span><span class="text-gray-400">5</span></a>
-                    <a href="#" class="sidebar-link block py-1.5 flex justify-between"><span>部署运维</span><span class="text-gray-400">4</span></a>
-                    <a href="#" class="sidebar-link block py-1.5 flex justify-between"><span>工具教程</span><span class="text-gray-400">6</span></a>
-                    <a href="#" class="sidebar-link block py-1.5 flex justify-between"><span>生活随笔</span><span class="text-gray-400">3</span></a>
+                    <a href="#" class="flex justify-between py-1.5 hover:text-primary"><span>前端开发</span><span class="text-gray-400">8</span></a>
+                    <a href="#" class="flex justify-between py-1.5 hover:text-primary"><span>前端优化</span><span class="text-gray-400">5</span></a>
+                    <a href="#" class="flex justify-between py-1.5 hover:text-primary"><span>部署运维</span><span class="text-gray-400">4</span></a>
+                    <a href="#" class="flex justify-between py-1.5 hover:text-primary"><span>工具教程</span><span class="text-gray-400">6</span></a>
+                    <a href="#" class="flex justify-between py-1.5 hover:text-primary"><span>生活随笔</span><span class="text-gray-400">3</span></a>
                 </div>
             </div>
-            <!-- 热门标签 -->
-            <div class="glass-soft p-6 hover-scale">
+            <div class="card-light p-6 hover-scale">
                 <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa fa-tags text-primary"></i> 热门标签</h3>
                 <div class="flex flex-wrap gap-2">
-                    <span class="tag">Tailwind</span>
-                    <span class="tag">静态博客</span>
-                    <span class="tag">Cloudflare</span>
-                    <span class="tag">页面优化</span>
-                    <span class="tag">GitHub</span>
-                    <span class="tag">CSS 动画</span>
-                    <span class="tag">免费部署</span>
-                </div>
-            </div>
-            <!-- 最新评论 -->
-            <div class="glass-soft p-6 hover-scale">
-                <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa fa-comments text-primary"></i> 最新评论</h3>
-                <div class="space-y-4 text-sm">
-                    <div>
-                        <p class="font-medium text-gray-700">访客 1</p>
-                        <p class="text-gray-500 mt-1">模板很好用，加载速度优化完秒开！</p>
-                    </div>
-                    <div>
-                        <p class="font-medium text-gray-700">访客 2</p>
-                        <p class="text-gray-500 mt-1">动态背景效果太好看了，感谢分享。</p>
-                    </div>
+                    <span class="tag-sm">Tailwind</span>
+                    <span class="tag-sm">静态博客</span>
+                    <span class="tag-sm">Cloudflare</span>
+                    <span class="tag-sm">页面优化</span>
+                    <span class="tag-sm">GitHub</span>
+                    <span class="tag-sm">免费部署</span>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- 页脚 居中 -->
-    <footer class="glass-soft mb-6 px-6 py-6 text-center text-gray-400 text-sm">
-        <p>© 2026 飞鸟折白梅 | 轻量化个人技术博客 All Rights Reserved</p>
-        <p class="mt-2">基于 Tailwind CSS 静态构建 | Cloudflare Pages 托管</p>
+    <!-- 页脚 -->
+    <footer class="wrap glass-bar mb-6 py-6 text-center text-gray-400 text-sm">
+        <p>© 2026 飞鸟折白梅 | 极简网格个人博客</p>
+        <p class="mt-2">基于Tailwind CSS静态构建 · Cloudflare Pages托管</p>
     </footer>
 
 <script>
-// ========== 鼠标跟随特效JS 完整恢复 ==========
+// 鼠标跟随逻辑
 const outer = document.querySelector('.cursor-outer');
 const inner = document.querySelector('.cursor-inner');
-const hoverItems = document.querySelectorAll('.hover-scale');
-window.addEventListener('mousemove', (e) => {
+const hoverEls = document.querySelectorAll('.hover-scale');
+window.addEventListener('mousemove', e=>{
     outer.style.left = e.clientX + 'px';
     outer.style.top = e.clientY + 'px';
     inner.style.left = e.clientX + 'px';
     inner.style.top = e.clientY + 'px';
-});
-hoverItems.forEach(item => {
-    item.addEventListener('mouseenter', () => {
-        outer.style.transform = 'translate(-50%, -50%) scale(1.6)';
+})
+hoverEls.forEach(el=>{
+    el.addEventListener('mouseenter', ()=>{
+        outer.style.transform = 'translate(-50%,-50%) scale(1.6)';
         outer.style.opacity = '0.3';
-    });
-    item.addEventListener('mouseleave', () => {
-        outer.style.transform = 'translate(-50%, -50%) scale(1)';
+    })
+    el.addEventListener('mouseleave', ()=>{
+        outer.style.transform = 'translate(-50%,-50%) scale(1)';
         outer.style.opacity = '1';
-    });
-});
+    })
+})
 // 平滑滚动
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.onclick = e => {
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.onclick = e=>{
         e.preventDefault();
-        document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-    };
-});
+        document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'})
+    }
+})
 </script>
 </body>
 </html>
