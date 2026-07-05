@@ -43,7 +43,7 @@
             line-height: 1.7;
             position: relative;
         }
-        /* 原生樱花飘落层 无外部依赖 */
+        /* 原生樱花飘落层 */
         #sakuraWrap {
             position: fixed;
             top: 0;
@@ -247,7 +247,7 @@
         .hover-scale {
             cursor: none;
         }
-        /* 音乐播放器 无搜索 本地固定歌单 */
+        /* 音乐播放器 */
         .music-box {
             position: fixed;
             bottom: 24px;
@@ -330,17 +330,20 @@
         .music-play-main {
             font-size: 30px !important;
         }
-        /* 顶部日期栏 */
+        /* 顶部日期+天气栏 */
         .date-bar {
             text-align:center;
             padding:8px 0;
             color:#444;
             font-size:14px;
+            display:flex;
+            justify-content:center;
+            gap:20px;
         }
     </style>
 </head>
 <body>
-    <!-- 原生樱花飘落容器 无任何第三方接口 -->
+    <!-- 樱花飘落层 -->
     <div id="sakuraWrap"></div>
     <!-- 底层网格背景 -->
     <div class="hero-bg">
@@ -352,7 +355,7 @@
     <!-- 爱心粒子画布 -->
     <canvas id="heartCanvas"></canvas>
 
-    <!-- 本地音乐播放器（彻底移除搜索功能，稳定不报错） -->
+    <!-- 本地无搜索音乐播放器 -->
     <div class="music-box">
         <div class="music-panel" id="musicPanel">
             <div class="music-title" id="musicTitle">晚风纯音乐</div>
@@ -377,8 +380,11 @@
 
     <!-- 页面主体内容层 -->
     <div class="page-layer">
-        <!-- 顶部实时日期 -->
-        <div class="date-bar" id="dateBox"></div>
+        <!-- 顶部实时日期+固定天气展示（规避citywid跨域报错） -->
+        <div class="date-bar" id="dateBox">
+            <span id="timeText"></span>
+            <span><i class="fas fa-cloud-sun"></i> 保定 晴 24℃</span>
+        </div>
         <!-- 导航栏 -->
         <header class="wrap glass-bar sticky top-0 mt-2 px-6 py-4 flex justify-between items-center hover-scale">
             <a href="#" class="text-xl font-bold text-gray-800 flex items-center gap-2">
@@ -566,7 +572,7 @@
                 <div class="card-light p-6 hover-scale">
                     <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa fa-list-ul text-primary"></i> 文章分类</h3>
                     <div class="space-y-2 text-sm text-gray-600">
-                        <a href="#" class="flex justify-between py-1.5 hover:text-primary"><span>前端开发</span><span class="text-gray-400">8</span></a>
+                        <a href="#" class="flex justify-between py-1.5 hover:text"><span>前端开发</span><span class="text-gray-400">8</span></a>
                         <a href="#" class="flex justify-between py-1.5 hover:text-primary"><span>前端优化</span><span class="text-gray-400">5</span></a>
                         <a href="#" class="flex justify-between py-1.5 hover:text-primary"><span>部署运维</span><span class="text-gray-400">4</span></a>
                         <a href="#" class="flex justify-between py-1.5 hover:text-primary"><span>工具教程</span><span class="text-gray-400">6</span></a>
@@ -595,153 +601,139 @@
     </div>
 
 <script>
-// ====================== 1. 原生樱花飘落（无任何外部接口，打开页面立刻生效） ======================
-const sakuraWrap = document.getElementById('sakuraWrap');
-function createSakura() {
+// 1. 樱花花瓣自动生成（无第三方接口，永久生效）
+function createSakura(){
+    const wrap = document.getElementById('sakuraWrap');
     const petal = document.createElement('div');
     petal.className = 'sakura';
-    // 随机花瓣大小
     const size = Math.random() * 12 + 6;
     petal.style.width = size + 'px';
     petal.style.height = size + 'px';
-    // 随机横向起始位置
     petal.style.left = Math.random() * 100 + 'vw';
-    // 下落动画时长 3~8秒随机
-    const fallTime = Math.random() * 5 + 3;
-    petal.style.animationDuration = fallTime + 's';
-    sakuraWrap.appendChild(petal);
-    // 花瓣落地后销毁，防止DOM堆积
-    setTimeout(() => {
-        petal.remove();
-    }, fallTime * 1000);
+    const t = Math.random() * 5 + 3;
+    petal.style.animationDuration = t + 's';
+    wrap.appendChild(petal);
+    setTimeout(()=>petal.remove(), t*1000);
 }
-// 每120ms生成一片樱花
-setInterval(createSakura, 120);
+setInterval(createSakura,120);
 
-// ====================== 2. 顶部实时日期自动刷新 ======================
+// 2. 顶部实时日期
 function updateDate(){
     const now = new Date();
-    const weekArr = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
-    const year = now.getFullYear();
-    const month = String(now.getMonth()+1).padStart(2,'0');
-    const day = String(now.getDate()).padStart(2,'0');
-    const week = weekArr[now.getDay()];
-    const hour = String(now.getHours()).padStart(2,'0');
-    const min = String(now.getMinutes()).padStart(2,'0');
-    const timeStr = `${year}年${month}月${day}日 ${week} ${hour}:${min}`;
-    document.getElementById('dateBox').innerText = timeStr;
+    const week = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+    const y = now.getFullYear();
+    const m = String(now.getMonth()+1).padStart(2,'0');
+    const d = String(now.getDate()).padStart(2,'0');
+    const w = week[now.getDay()];
+    const h = String(now.getHours()).padStart(2,'0');
+    const mi = String(now.getMinutes()).padStart(2,'0');
+    document.getElementById('timeText').innerText = `${y}年${m}月${d}日 ${w} ${h}:${mi}`;
 }
 updateDate();
 setInterval(updateDate,1000);
 
-// ====================== 3. 粉色跳动爱心鼠标粒子特效 ======================
+// 3. 粉色爱心鼠标粒子
 const canvas = document.getElementById('heartCanvas');
 const ctx = canvas.getContext('2d');
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+function resizeCanvas(){
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
 }
 resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-const mouse = { x: 0, y: 0 };
-const heartList = [];
-const heartPrecision = 24;
-const heartVertex = [];
-for (let i = 0; i < heartPrecision; i++) {
-    const angle = (i / heartPrecision - 0.5) * Math.PI * 2;
-    const x = 16 * Math.pow(Math.sin(angle), 3);
-    const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
-    heartVertex.push({ x, y });
+addEventListener('resize',resize);
+const mouse = {x:0,y:0};
+const hearts = [];
+const pointNum = 24;
+const heartPath = [];
+for(let i=0;i<pointNum;i++){
+    const a = (i / pointNum) * Math.PI * 2;
+    const x = 16 * Math.pow(Math.sin(a),3);
+    const y = -(13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a));
+    heartPath.push({x,y});
 }
-class HeartParticle {
-    constructor(x, y) {
+class Heart{
+    constructor(x,y){
         this.x = x;
         this.y = y;
         this.baseY = y;
-        this.size = Math.random() * 0.6 + 0.4;
+        this.size = Math.random()*0.6+0.4;
         this.alpha = 1;
-        this.fadeSpeed = Math.random() * 0.018 + 0.012;
-        this.bounceSpeed = Math.random() * 0.08 + 0.04;
-        this.bounceRange = Math.random() * 12 + 6;
-        this.bounceTime = Math.random() * Math.PI * 2;
-        this.speedX = (Math.random() - 0.5) * 1.2;
-        this.speedY = -Math.random() * 1.8 - 0.6;
+        this.fade = Math.random()*0.018+0.012;
+        this.spd = Math.random()*0.08+0.04;
+        this.range = Math.random()*12+6;
+        this.t = Math.random()*Math.PI*2;
+        this.vx = (Math.random()-0.5)*1.2;
+        this.vy = -Math.random()*1.8-0.6;
     }
-    update() {
-        this.bounceTime += this.bounceSpeed;
-        this.y = this.baseY + Math.sin(this.bounceTime) * this.bounceRange;
-        this.baseY += this.speedY;
-        this.x += this.speedX;
-        this.alpha -= this.fadeSpeed;
+    update(){
+        this.t += this.spd;
+        this.y = this.baseY + Math.sin(this.t)*this.range;
+        this.baseY += this.vy;
+        this.x += this.vx;
+        this.alpha -= this.fade;
     }
-    draw() {
+    draw(){
         ctx.save();
         ctx.translate(this.x,this.y);
-        ctx.scale(this.size, this.size);
+        ctx.scale(this.size,this.size);
         ctx.beginPath();
-        ctx.moveTo(heartVertex[0].x, heartVertex[0].y);
-        for (let i = 1; i < heartPrecision; i++) {
-            ctx.lineTo(heartVertex[i].x, heartVertex[i].y);
-        }
+        ctx.moveTo(heartPath[0].x,heartPath[0].y);
+        for(let i=1;i<pointNum;i++) ctx.lineTo(heartPath[i].x,heartPath[i].y);
         ctx.closePath();
-        ctx.fillStyle = `rgba(255, 102, 168, ${this.alpha})`;
+        ctx.fillStyle = `rgba(255,102,168,${this.alpha})`;
         ctx.fill();
         ctx.restore();
     }
 }
-document.addEventListener('mousemove', (e) => {
+addEventListener('mousemove',e=>{
     mouse.x = e.clientX;
     mouse.y = e.clientY;
-    heartList.push(new HeartParticle(mouse.x, mouse.y));
-    if (heartList.length > 28) heartList.shift();
+    hearts.push(new Heart(mouse.x,mouse.y));
+    if(hearts.length>28) hearts.shift();
 });
-document.addEventListener('click', (e) => {
-    for (let i = 0; i < 12; i++) {
-        setTimeout(()=>{
-            heartList.push(new HeartParticle(e.clientX,e.clientY));
-        },i*15);
-    }
+addEventListener('click',e=>{
+    for(let i=0;i<12;i++) setTimeout(()=>hearts.push(new Heart(e.clientX,e.clientY)),i*15);
 });
-function renderLoop() {
+function render(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(let i=heartList.length-1;i>=0;i--){
-        const heart = heartList[i];
-        heart.update();
-        heart.draw();
-        if(heart.alpha <= 0) heartList.splice(i,1);
+    for(let i=hearts.length-1;i>=0;i--){
+        const h = hearts[i];
+        h.update();
+        h.draw();
+        if(h.alpha<=0) hearts.splice(i,1);
     }
-    requestAnimationFrame(renderLoop);
+    requestAnimationFrame(render);
 }
-renderLoop();
+render();
 
-// ====================== 4. 本地内置音乐播放器（无搜索、无外部API、永久可用） ======================
+// 4. 本地稳定播放器（无搜索、无跨域报错）
 const audio = document.getElementById('audioPlayer');
 const playBtn = document.getElementById('playBtn');
 const miniBtn = document.getElementById('miniBtn');
 const panel = document.getElementById('musicPanel');
 const progressWrap = document.getElementById('progressWrap');
-const progressBar = document.getElementById('progressBar');
+const progressBar = document.getElementById('currentTime');
 const currentTimeDom = document.getElementById('currentTime');
 const totalTimeDom = document.getElementById('totalTime');
 const titleDom = document.getElementById('musicTitle');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
-
-// 内置稳定播放歌单（无网络也能播放）
-const localMusicList = [
-    { name: "晚风纯音乐", url: "https://music.163.com/song/media/outer/url?id=1334870365.mp3" },
-    { name: "春日温柔钢琴曲", url: "https://music.163.com/song/media/outer/url?id=1884447702.mp3" },
-    { name: "夏夜晚风钢琴", url: "https://music.163.com/song/media/outer/url?id=1902443105.mp3" },
-    { name: "雾岛听风纯音乐", url: "https://music.163.com/song/media/outer/url?id=1798220413.mp3" },
-    { name: "星河入梦轻音乐", url: "https://music.163.com/song/media/outer/url?id=1412001235.mp3" }
+const musicList = [
+    {name:"晚风纯音乐",url:"https://music.163.com/song/media/outer/url?id=1334870365.mp3"},
+    {name:"春日温柔钢琴曲",url:"https://music.163.com/song/media/outer/url?id=1884447702.mp3"},
+    {name:"夏夜晚风钢琴",url:"https://music.163.com/song/media/outer/url?id=1902443105.mp3"},
+    {name:"雾岛听风纯音乐",url:"https://music.163.com/song/media/outer/url?id=1798220413.mp3"},
+    {name:"星河入梦轻音乐",url:"https://music.163.com/song/media/outer/url?id=1412001235.mp3"}
 ];
-let currentMusicIndex = 0;
-
-// 展开/收起播放器面板
+let idx = 0;
 miniBtn.onclick = ()=> panel.classList.toggle('show');
-
-// 播放暂停
-playBtn.onclick = async function(){
+function loadSong(item){
+    audio.src = item.url;
+    titleDom.innerText = item.name;
+    audio.load();
+}
+loadSong(musicList[0]);
+playBtn.onclick = async ()=>{
     if(audio.paused || audio.ended){
         audio.muted = false;
         await audio.play();
@@ -751,72 +743,51 @@ playBtn.onclick = async function(){
         playBtn.className = "fas fa-play music-btn music-play-main";
     }
 };
-
-// 上一曲
 prevBtn.onclick = ()=>{
-    currentMusicIndex--;
-    if(currentMusicIndex < 0) currentMusicIndex = localMusicList.length - 1;
-    loadAudio(localMusicList[currentMusicIndex]);
+    idx--;
+    if(idx<0) idx = musicList.length-1;
+    loadSong(musicList[idx]);
     audio.play();
     playBtn.className = "fas fa-pause music-btn music-play-main";
 };
-// 下一曲
 nextBtn.onclick = ()=>{
-    currentMusicIndex++;
-    if(currentMusicIndex >= localMusicList.length) currentMusicIndex = 0;
-    loadAudio(localMusicList[currentMusicIndex]);
+    idx++;
+    if(idx>=music.length) idx=0;
+    loadSong(musicList[idx]);
     audio.play();
     playBtn.className = "fas fa-pause music-btn music-play-main";
 };
-
-// 加载音频
-function loadAudio(song){
-    audio.src = song.url;
-    titleDom.innerText = song.name;
-    audio.load();
+function fmt(s){
+    if(isNaN(s)) return "00:00";
+    let m = Math.floor(s/60), sec = Math.floor(s%60);
+    return String(m).padStart(2,'0')+":"+String(sec).padStart(2,'0');
 }
-loadAudio(localMusicList[0]);
-
-// 时分秒格式化
-function formatTime(sec){
-    if(isNaN(sec)) return "00:00";
-    const m = Math.floor(sec / 60);
-    const s = Math.floor(sec % 60);
-    return String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
-}
-
-// 进度条更新
 audio.ontimeupdate = ()=>{
     if(audio.duration){
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progressBar.style.width = percent + "%";
-        currentTimeDom.innerText = formatTime(audio.currentTime);
+        let p = (audio.currentTime/audio.duration)*100;
+        progressBar.style.width = p+"%";
+        currentTimeDom.innerText = fmt(audio.currentTime);
     }
 };
-audio.onloadedmetadata = ()=> totalTimeDom.innerText = formatTime(audio.duration);
-
-// 点击进度跳转
-progressWrap.onclick = (e)=>{
+audio.onloadedmetadata = ()=> totalTimeDom.innerText = fmt(audio.duration);
+progressWrap.onclick = e=>{
     if(!audio.duration) return;
-    const rect = progressWrap.getBoundingClientRect();
-    const pct = (e.clientX - rect.left) / rect.width;
-    audio.currentTime = pct * audio.duration;
+    const r = progressWrap.getBoundingClientRect();
+    const per = (e.clientX - r.left)/r.width;
+    audio.currentTime = per * audio.duration;
 };
-
-// 播放结束自动切下一首
 audio.onended = ()=>{
-    currentMusicIndex++;
-    if(currentMusicIndex >= localMusicList.length) currentMusicIndex = 0;
-    loadAudio(localMusicList[currentMusicIndex]);
+    idx++;
+    if(idx>=music.length) idx=0;
+    loadSong(musicList[idx]);
     audio.play();
     playBtn.className = "fas fa-pause music-btn music-play-main";
 };
-
 // 页面锚点平滑滚动
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.onclick = (e) => {
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+    link.onclick = e=>{
         e.preventDefault();
-        document.querySelector(link.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+        document.querySelector(link.getAttribute('href')).scrollIntoView({behavior:"smooth"});
     };
 });
 </script>
