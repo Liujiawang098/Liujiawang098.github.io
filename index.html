@@ -40,9 +40,8 @@
             color: #1a1a1a;
             overflow-x: hidden;
             line-height: 1.7;
-            /* 移除flex堆叠上下文，解决z-index失效 */
         }
-        /* ========== 画布放最底层，不遮挡页面内容 ========== */
+        /* 爱心画布底层 */
         #heartCanvas {
             position: fixed;
             top: 0;
@@ -50,9 +49,8 @@
             width: 100vw;
             height: 100vh;
             pointer-events: none;
-            z-index: 1; /* 底层，页面内容z-index=10覆盖它 */
+            z-index: 1;
         }
-        /* 页面所有内容容器统一高z-index，浮在canvas上方 */
         .page-layer {
             position: relative;
             z-index: 10;
@@ -66,7 +64,7 @@
             height: 100%;
             opacity: 0.4;
             pointer-events: none;
-            z-index: 0; /* 最底层网格 */
+            z-index: 0;
         }
         .grid-lines {
             position: absolute;
@@ -77,7 +75,6 @@
             animation: gridMove 25s linear infinite;
         }
         @keyframes gridMove {0%{transform:translate(0,0)}100%{transform:translate(48px,48px)}}
-        /* 页面装饰小圆点 */
         .dot-deco {
             position: absolute;
             border-radius: 50%;
@@ -87,7 +84,7 @@
         .dot1 {width:6px;height:6px;top:8%;left:10%}
         .dot2 {width:8px;height:8px;top:22%;right:18%}
         .dot3 {width:5px;height:5px;bottom:15%;left:45%}
-        /* 头像外圈淡蓝光晕（和截图完全一致） */
+        /* 头像外圈淡蓝光晕 */
         .avatar-wrap {
             width: 140px;
             height: 140px;
@@ -120,7 +117,6 @@
             border-radius: 50%;
             border: 3px solid white;
         }
-        /* 空心蓝色边框标签按钮 */
         .tag-outline {
             border: 1.5px solid #2563eb;
             color: #2563eb;
@@ -129,7 +125,6 @@
             font-size: 16px;
             background: transparent;
         }
-        /* 渐变蓝色统计数字 */
         .stat-num {
             font-size: 48px;
             font-weight: 700;
@@ -142,7 +137,6 @@
             height: 50px;
             background: #e2e8f0;
         }
-        /* 轻玻璃卡片通用 */
         .card-light {
             background: rgba(255,255,255,0.9);
             border: 1px solid #e5e7eb;
@@ -154,7 +148,6 @@
             transform: translateY(-5px);
             box-shadow: 0 14px 36px rgba(37,99,235,0.08);
         }
-        /* 终端窗口样式 */
         .terminal-head {
             background: #f8fafc;
             padding: 14px 20px;
@@ -172,13 +165,11 @@
             font-family: Consolas,monospace;
             font-size: 14px;
         }
-        /* 页面最大宽度居中容器 */
         .wrap {
             width: min(100% - 40px, 1240px);
             margin: 0 auto;
             position: relative;
         }
-        /* 导航/页脚玻璃栏 */
         .glass-bar {
             background: rgba(255,255,255,0.85);
             border: 1px solid #e5e7eb;
@@ -228,9 +219,89 @@
             border-radius: 99px;
             font-size: 12px;
         }
-        /* 所有可悬浮元素禁用原生鼠标 */
         .hover-scale {
             cursor: none;
+        }
+        /* ========== 悬浮音乐播放器样式 ========== */
+        .music-box {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        .music-mini {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            box-shadow: 0 6px 20px rgba(37,99,235,0.25);
+            cursor: pointer;
+        }
+        .music-panel {
+            width: 320px;
+            background: rgba(255,255,255,0.94);
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            padding: 20px;
+            margin-bottom: 12px;
+            display: none;
+        }
+        .music-panel.show {
+            display: block;
+        }
+        .music-progress {
+            width: 100%;
+            height: 5px;
+            background: #e2e8f0;
+            border-radius: 99px;
+            margin: 12px 0;
+            cursor: pointer;
+        }
+        .music-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #2563eb;
+            border-radius: 99px;
+        }
+        .music-time-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+        .music-btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 16px;
+            font-size: 22px;
+            align-items: center;
+        }
+        .music-btn {
+            cursor: pointer;
+            color: #333;
+            transition: 0.2s;
+        }
+        .music-btn:hover {
+            color: #2563eb;
+        }
+        .music-play-main {
+            font-size: 30px;
+        }
+        .music-title {
+            font-weight: 600;
+            text-align: center;
+            font-size: 15px;
+            color: #222;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     </style>
 </head>
@@ -242,10 +313,36 @@
         <div class="dot-deco dot2"></div>
         <div class="dot-deco dot3"></div>
     </div>
-    <!-- 爱心画布：底层z-index=1，不会盖住页面 -->
+    <!-- 爱心画布 -->
     <canvas id="heartCanvas"></canvas>
 
-    <!-- ========== 所有页面内容包裹page-layer，强制浮在canvas上方 ========== -->
+    <!-- 悬浮音乐播放器 -->
+    <div class="music-box">
+        <div class="music-panel" id="musicPanel">
+            <div class="music-title" id="musicTitle">纯音乐示例</div>
+            <div class="music-progress" id="progressWrap">
+                <div class="music-progress-bar" id="progressBar"></div>
+            </div>
+            <div class="music-time-row">
+                <span id="currentTime">00:00</span>
+                <span id="totalTime">00:00</span>
+            </div>
+            <div class="music-btn-row">
+                <i class="fas fa-step-backward music-btn" id="prevBtn"></i>
+                <i class="fas fa-play music-btn music-play-main" id="playBtn"></i>
+                <i class="fas fa-step-forward music-btn" id="nextBtn"></i>
+            </div>
+            <!-- 音频资源，可替换自己音乐链接 -->
+            <audio id="audioPlayer" muted preload="metadata">
+                <source src="https://music.163.com/song/media/outer/url?id=1334870365.mp3" type="audio/mpeg">
+            
+        </div>
+        <div class="music-mini" id="miniBtn">
+            <i class="fas fa-music"></i>
+        </div>
+    </div>
+
+    <!-- 页面主体内容 -->
     <div class="page-layer">
         <!-- 导航栏 -->
         <header class="wrap glass-bar sticky top-0 mt-6 px-6 py-4 flex justify-between items-center hover-scale">
@@ -261,9 +358,8 @@
             <a href="#about" class="btn-blue text-sm hover-scale">联系我</a>
         </header>
 
-        <!-- 首页Hero 左右分栏，完全复刻截图居中UI -->
+        <!-- 首页Hero 左右分栏 -->
         <section class="wrap py-14 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <!-- 左侧个人信息区 -->
             <div class="text-center space-y-7 hover-scale">
                 <div class="avatar-wrap mx-auto">
                     <div class="avatar-frame">
@@ -278,7 +374,6 @@
                 </div>
                 <span class="tag-outline inline-block">全栈开发者</span>
                 <h2 class="text-2xl text-gray-700 font-normal">创造美观且高性能的数字产品</h2>
-                <!-- 三栏统计 -->
                 <div class="flex justify-center items-center gap-6">
                     <div>
                         <p class="stat-num">4</p>
@@ -295,19 +390,16 @@
                         <p class="text-gray-400 text-sm">% 热情</p>
                     </div>
                 </div>
-                <!-- 操作按钮 -->
                 <div class="flex justify-center gap-4">
                     <a href="#article" class="btn-blue flex items-center gap-2 hover-scale">查看文章 <i class="fa fa-arrow-right"></i></a>
                     <a href="#about" class="btn-gray flex items-center gap-2 hover-scale">联系我 <i class="fa fa-envelope-o"></i></a>
                 </div>
-                <!-- 社交图标 -->
                 <div class="flex justify-center gap-3">
                     <a href="#" class="social-icon hover-scale"><i class="fa fa-github"></i></a>
                     <a href="#" class="social-icon hover-scale"><i class="fa fa-qq"></i></a>
                     <a href="#" class="social-icon hover-scale"><i class="fa fa-comment"></i></a>
                 </div>
             </div>
-            <!-- 右侧三层终端卡片 -->
             <div class="flex flex-col gap-5">
                 <div class="card-light hover-scale">
                     <div class="terminal-head">
@@ -358,11 +450,10 @@
             </div>
         </section>
 
-        <!-- 博客主内容区域 -->
+        <!-- 博客区域 -->
         <main class="wrap grid grid-cols-1 lg:grid-cols-4 gap-8 py-10" id="article">
             <div class="lg:col-span-3 space-y-6">
                 <h2 class="text-2xl font-bold border-l-4 border-primary pl-4">最新文章</h2>
-                <!-- 置顶文章卡片 -->
                 <div class="card-light p-6 border-l-4 border-primary hover-scale">
                     <span class="tag-sm mb-3 inline-block">置顶推荐</span>
                     <h3 class="text-xl font-bold text-gray-800 hover:text-primary transition-colors mb-2">从零搭建轻量化个人静态博客</h3>
@@ -374,7 +465,6 @@
                     <p class="text-gray-600 leading-relaxed">使用 Tailwind CSS 搭建纯静态博客，搭配 Cloudflare Pages 免费托管，无需服务器和数据库，国内访问速度优化，自带动态网格背景。</p>
                     <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
                 </div>
-                <!-- 普通文章1 -->
                 <div class="card-light p-6 hover-scale">
                     <span class="tag-sm mb-3 inline-block">技术分享</span>
                     <h3 class="text-xl font-bold text-gray-800 hover:text-primary transition-colors mb-2">Tailwind CSS 国内CDN优化方案</h3>
@@ -386,7 +476,6 @@
                     <p class="text-gray-600">替换海外字体资源，使用国内稳定CDN，解决页面白屏、加载缓慢问题。</p>
                     <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
                 </div>
-                <!-- 普通文章2 -->
                 <div class="card-light p-6 hover-scale">
                     <span class="tag-sm mb-3 inline-block">部署教程</span>
                     <h3 class="text-xl font-bold text-gray-800 hover:text-primary transition-colors mb-2">GitHub Pages + Cloudflare Pages 双平台部署</h3>
@@ -398,7 +487,6 @@
                     <p class="text-gray-600">免费静态站点托管教程，自定义缓存规则，图片懒加载配置。</p>
                     <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
                 </div>
-                <!-- 分页控件 -->
                 <div class="flex justify-center gap-2 py-4">
                     <span class="card-light px-4 py-2 rounded-lg text-gray-400 cursor-not-allowed">上一页</span>
                     <span class="bg-primary text-white px-4 py-2 rounded-lg">1</span>
@@ -406,7 +494,6 @@
                     <span class="card-light px-4 py-2 rounded-lg">3</span>
                     <span class="card-light px-4 py-2 rounded-lg">下一页</span>
                 </div>
-                <!-- 开源项目板块 -->
                 <div id="project" class="pt-10">
                     <h2 class="text-2xl font-bold border-l-4 border-primary pl-4 mb-6">开源项目</h2>
                     <div class="grid md:grid-cols-2 gap-6">
@@ -423,9 +510,7 @@
                     </div>
                 </div>
             </div>
-            <!-- 右侧侧边栏 -->
             <div class="lg:col-span-1 space-y-6" id="about">
-                <!-- 博主信息卡片 -->
                 <div class="card-light p-6 text-center hover-scale">
                     <div class="avatar-wrap mx-auto mb-4 w-28 h-28">
                         <div class="avatar-frame">
@@ -442,7 +527,6 @@
                         <a href="#" class="social-icon hover-scale"><i class="fa fa-envelope"></i></a>
                     </div>
                 </div>
-                <!-- 文章分类 -->
                 <div class="card-light p-6 hover-scale">
                     <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa fa-list-ul text-primary"></i> 文章分类</h3>
                     <div class="space-y-2 text-sm text-gray-600">
@@ -453,7 +537,6 @@
                         <a href="#" class="flex justify-between py-1.5 hover:text-primary"><span>生活随笔</span><span class="text-gray-400">3</span></a>
                     </div>
                 </div>
-                <!-- 热门标签 -->
                 <div class="card-light p-6 hover-scale">
                     <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa fa-tags text-primary"></i> 热门标签</h3>
                     <div class="flex flex-wrap gap-2">
@@ -468,7 +551,6 @@
             </div>
         </main>
 
-        <!-- 页脚 -->
         <footer class="wrap glass-bar mb-6 py-6 text-center text-gray-400 text-sm">
             <p>© 2026 飞鸟折白梅 | 极简网格个人博客</p>
             <p class="mt-2">基于Tailwind CSS静态构建 · Cloudflare Pages托管</p>
@@ -476,60 +558,46 @@
     </div>
 
 <script>
-// ====================== 跳动爱心鼠标特效核心代码（修复白色遮罩bug） ======================
+// ====================== 爱心鼠标粒子特效 ======================
 const canvas = document.getElementById('heartCanvas');
 const ctx = canvas.getContext('2d');
-// 画布自适应窗口
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
-
-// 鼠标坐标
 const mouse = { x: 0, y: 0 };
-// 爱心粒子数组
 const heartList = [];
-// 爱心精度（曲线平滑度）
 const heartPrecision = 24;
-// 爱心数学曲线顶点缓存
 const heartVertex = [];
-// 预计算爱心贝塞尔曲线坐标
 for (let i = 0; i < heartPrecision; i++) {
     const angle = (i / heartPrecision - 0.5) * Math.PI * 2;
     const x = 16 * Math.pow(Math.sin(angle), 3);
     const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
     heartVertex.push({ x, y });
 }
-
-// 爱心粒子类（自带上下跳动动画）
 class HeartParticle {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.baseY = y; // 基准Y坐标，用于上下弹跳
-        this.size = Math.random() * 0.6 + 0.4; // 大小缩放
-        this.alpha = 1; // 透明度
-        this.fadeSpeed = Math.random() * 0.018 + 0.012; // 消散速度
-        this.bounceSpeed = Math.random() * 0.08 + 0.04; // 跳动速度
-        this.bounceRange = Math.random() * 12 + 6; // 跳动幅度
-        this.bounceTime = Math.random() * Math.PI * 2; // 随机相位，错落跳动
-        this.speedX = (Math.random() - 0.5) * 1.2; // 水平飘散
-        this.speedY = -Math.random() * 1.8 - 0.6; // 持续上浮
+        this.baseY = y;
+        this.size = Math.random() * 0.6 + 0.4;
+        this.alpha = 1;
+        this.fadeSpeed = Math.random() * 0.018 + 0.012;
+        this.bounceSpeed = Math.random() * 0.08 + 0.04;
+        this.bounceRange = Math.random() * 12 + 6;
+        this.bounceTime = Math.random() * Math.PI * 2;
+        this.speedX = (Math.random() - 0.5) * 1.2;
+        this.speedY = -Math.random() * 1.8 - 0.6;
     }
-    // 更新每一帧状态
     update() {
-        // 上下正弦跳动
         this.bounceTime += this.bounceSpeed;
         this.y = this.baseY + Math.sin(this.bounceTime) * this.bounceRange;
-        // 缓慢上浮、左右偏移
         this.baseY += this.speedY;
         this.x += this.speedX;
-        // 透明度衰减
         this.alpha -= this.fadeSpeed;
     }
-    // 绘制爱心形状
     draw() {
         ctx.save();
         ctx.translate(this.x,this.y);
@@ -545,15 +613,12 @@ class HeartParticle {
         ctx.restore();
     }
 }
-
-// 鼠标移动生成爱心
 document.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
     heartList.push(new HeartParticle(mouse.x, mouse.y));
     if (heartList.length > 28) heartList.shift();
 });
-// 点击页面爆发大量爱心
 document.addEventListener('click', (e) => {
     for (let i = 0; i < 12; i++) {
         setTimeout(()=>{
@@ -561,8 +626,6 @@ document.addEventListener('click', (e) => {
         },i*15);
     }
 });
-
-// 只清空画布透明，无白色遮罩，不会盖住页面文字
 function renderLoop() {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     for(let i=heartList.length-1;i>=0;i--){
@@ -575,7 +638,107 @@ function renderLoop() {
 }
 renderLoop();
 
-// 页面内锚点平滑滚动
+// ====================== 音乐播放器逻辑 ======================
+const audio = document.getElementById('audioPlayer');
+const playBtn = document.getElementById('playBtn');
+const miniBtn = document.getElementById('miniBtn');
+const panel = document.getElementById('musicPanel');
+const progressWrap = document.getElementById('progressWrap');
+const progressBar = document.getElementById('progressBar');
+const currentTimeDom = document.getElementById('currentTime');
+const totalTimeDom = document.getElementById('totalTime');
+const titleDom = document.getElementById('musicTitle');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+// 歌单列表，可自行替换歌曲链接和名称
+const musicList = [
+    {
+        name: "晚风纯音乐",
+        src: "https://music.163.com/song/media/outer/url?id=1334870365.mp3"
+    },
+    {
+        name: "春日温柔钢琴曲",
+        src: "https://music.163.com/song/media/outer/url?id=1884447702.mp3"
+    },
+    {
+        name: "静谧自习轻音乐",
+        src: "https://music.163.com/song/media/outer/url?id=1412001235.mp3"
+    }
+];
+let currentIndex = 0;
+
+// 切换面板显示隐藏
+miniBtn.onclick = ()=>{
+    panel.classList.toggle('show');
+};
+// 切换播放暂停
+playBtn.onclick = ()=>{
+    if(audio.paused){
+        audio.muted = false; // 取消静音
+        audio.play();
+        playBtn.className = "fas fa-pause music-btn music-play-main";
+    }else{
+        audio.pause();
+        playBtn.className = "fas fa-play music-btn music-play-main";
+    }
+};
+// 上一曲
+prevBtn.onclick = ()=>{
+    currentIndex--;
+    if(currentIndex < 0) currentIndex = musicList.length - 1;
+    loadMusic();
+    audio.play();
+    playBtn.className = "fas fa-pause music-btn music-play-main";
+};
+// 下一曲
+nextBtn.onclick = ()=>{
+    currentIndex++;
+    if(currentIndex >= musicList.length) currentIndex = 0;
+    loadMusic();
+    audio.play();
+    playBtn.className = "fas fa-pause music-btn music-play-main";
+};
+// 加载歌曲
+function loadMusic(){
+    const item = musicList[currentIndex];
+    audio.src = item.src;
+    titleDom.innerText = item.name;
+    audio.load();
+}
+loadMusic();
+// 格式化时间
+function formatTime(s){
+    let min = Math.floor(s / 60);
+    let sec = Math.floor(s % 60);
+    return String(min).padStart(2,'0') + ":" + String(sec).padStart(2,'0');
+}
+// 进度更新
+audio.ontimeupdate = ()=>{
+    let per = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = per + "%";
+    currentTimeDom.innerText = formatTime(audio.currentTime);
+};
+// 总时长获取
+audio.onloadedmetadata = ()=>{
+    totalTimeDom.innerText = formatTime(audio.duration);
+};
+// 点击进度条跳转
+progressWrap.onclick = (e)=>{
+    let rect = progressWrap.getBoundingClientRect();
+    let per = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = per * audio.duration;
+};
+// 播放结束自动下一首
+audio.onended = ()=>{
+    currentIndex++;
+    if(currentIndex >= musicList.length) currentIndex = 0;
+    loadMusic();
+    audio.play();
+    playBtn.className = "fas fa-pause music-btn music-play-main";
+};
+
+// 页面平滑滚动
 document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.onclick = (e) => {
         e.preventDefault();
