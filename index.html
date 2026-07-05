@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="baidu-site-verification" content="codeva-NZ7P0Fsakr" />
-    <title>YuHuan | 个人技术博客</title>
+    <title>飞鸟折白梅 | 个人技术博客</title>
     <link rel="icon" type="image/png" href="img/tx.jpg">
     <script src="https://cdn.bootcdn.net/ajax/libs/tailwindcss/3.3.2/tailwind.min.js"></script>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,7 +17,6 @@
                         red-dot: '#ff5f57',
                         yellow-dot: '#ffbd2e',
                         green-dot: '#28c840',
-                        bg-light: '#f8fafc',
                         border-light: '#e2e8f0'
                     },
                     fontFamily: {
@@ -48,45 +47,23 @@
             line-height: 1.8;
             position: relative;
         }
-        /* 浮动几何装饰 匹配截图淡蓝方块圆点 */
-        .decor-dot {
+        /* 漂浮樱花花瓣 */
+        .sakura-petal {
             position: fixed;
-            width: 8px;
-            height: 8px;
-            background: rgba(37,99,235,0.15);
-            border-radius: 50%;
-            z-index: 0;
-        }
-        .decor-square {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            border: 1px solid rgba(37,99,235,0.12);
-            border-radius: 12px;
-            z-index: 0;
-        }
-        /* 樱花飘落 */
-        #sakuraWrap {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 5;
-            overflow: hidden;
-        }
-        .sakura {
-            position: absolute;
-            background: linear-gradient(135deg,#ffd6e8,#ffb8cc);
+            width: 12px;
+            height: 12px;
+            background: rgba(255,180,200,0.4);
             border-radius: 60% 0 60% 0;
-            opacity: 0.7;
-            animation: sakuraFall linear infinite;
+            z-index: 0;
+            animation: sakuraFloat linear infinite;
         }
-        @keyframes sakuraFall {
-            0% { transform: translateY(-10px) rotate(0deg) translateX(0px); }
-            100% { transform: translateY(100vh) rotate(720deg) translateX(25px); }
+        @keyframes sakuraFloat {
+            0% { transform: translateY(-10px) rotate(0deg) translateX(0px); opacity:0; }
+            10% { opacity:1; }
+            90% { opacity:1; }
+            100% { transform: translateY(100vh) rotate(720deg) translateX(30px); opacity:0; }
         }
+        /* 点击爱心粒子 */
         #heartCanvas {
             position: fixed;
             top: 0;
@@ -100,55 +77,59 @@
             position: relative;
             z-index: 10;
         }
-        /* 终端窗口样式 复刻截图，文字完全保留不变 */
-        .terminal-card {
-            background: #ffffff;
-            border: 1px solid var(--border-light);
+        /* 顶部全局导航栏 */
+        .top-nav-wrap {
+            width: min(100% - 40px, 1240px);
+            margin: 0 auto;
+            padding: 12px 20px;
+            background: #fff;
             border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-            padding: 16px;
-            width: min(460px, 100%);
-            transition: 0.3s ease;
-        }
-        .terminal-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 14px 32px rgba(37,99,235,0.08);
-        }
-        .terminal-header {
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
         }
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
+        .nav-left .nick {
+            color: #2563eb;
+            font-size: 18px;
+            font-weight: 600;
         }
-        .terminal-title {
-            font-size: 13px;
-            color: #6b7280;
-            font-family: var(--mono);
+        .nav-links a {
+            color: #2563eb;
+            margin-right: 12px;
+            text-decoration: none;
         }
-        .terminal-body {
-            font-family: var(--mono);
-            font-size: 14px;
-            color: #333;
-            white-space: pre-wrap;
+        .btn-contact {
+            background: #2563eb;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 12px;
+            text-decoration: none;
         }
-        /* 左侧个人信息卡片 文字完全不修改 */
+        /* 顶部日期天气栏 */
+        .date-bar {
+            text-align:center;
+            padding:10px 0;
+            color:#444;
+            font-size:15px;
+            display:flex;
+            justify-content:center;
+            gap:36px;
+            flex-wrap:wrap;
+        }
+        .weather-card {
+            background:rgba(255,255,255,0.85);
+            padding:6px 18px;
+            border-radius:999px;
+            box-shadow:0 2px 12px rgba(37,99,235,0.08);
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+        /* 左侧个人信息卡片 截图竖排样式 */
         .profile-card {
-            background: #ffffff;
-            border: 1px solid var(--border-light);
-            border-radius: 24px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-            padding: 32px;
             width: min(380px, 100%);
-            transition: 0.3s ease;
-        }
-        .profile-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 14px 32px rgba(37,99,235,0.08);
+            padding: 32px;
         }
         .avatar-wrap {
             width: 140px;
@@ -156,18 +137,7 @@
             border-radius: 50%;
             background: rgba(37, 99, 235, 0.08);
             padding: 6px;
-            margin: 0 auto;
-            position: relative;
-        }
-        .online-badge {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            width: 22px;
-            height: 22px;
-            background: var(--green-dot);
-            border-radius: 50%;
-            border: 3px solid white;
+            margin-bottom: 20px;
         }
         .avatar-frame {
             width: 100%;
@@ -175,68 +145,25 @@
             border-radius: 50%;
             overflow: hidden;
         }
-        .stat-item p:first-child {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .tag-outline {
+        .tag-fullstack {
             border: 1.5px solid var(--primary);
             color: var(--primary);
             border-radius: 999px;
-            padding: 8px 28px;
-            font-size: 15px;
-            background: transparent;
+            padding: 6px 20px;
+            font-size: 14px;
             display: inline-block;
+            margin: 8px 0;
         }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            border-radius: 14px;
-            padding: 12px 28px;
-            text-decoration: none;
-            transition: 0.2s;
-            display: inline-block;
+        .stat-item p:first-child {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
         }
-        .btn-primary:hover {
-            background: #1d4ed8;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 18px rgba(37,99,235,0.2);
+        .stat-item {
+            margin: 32px 0;
         }
-        .btn-outline {
-            border: 1px solid var(--border-light);
-            border-radius: 14px;
-            padding: 12px 28px;
-            text-decoration: none;
-            color: #333;
-            transition: 0.2s;
-            display: inline-block;
-        }
-        .btn-outline:hover {
-            background: #f1f5f9;
-            transform: translateY(-3px);
-        }
-        .social-mini {
-            width: 100%;
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-        .social-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 12px;
-            background: #f1f5f9;
-            text-align: center;
-            color: #333;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .social-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-        /* 内置底部音频播放器，删除悬浮浮窗 */
+        /* 底部内置音频控制条 */
         .audio-inner {
             width: min(100% - 40px, 1240px);
             margin: 40px auto 0;
@@ -277,27 +204,7 @@
             background: linear-gradient(90deg,#2563eb,#3b82f6);
             border-radius: 99px;
         }
-        /* 顶部日期+天气美化栏 */
-        .date-bar {
-            text-align:center;
-            padding:10px 0;
-            color:#444;
-            font-size:15px;
-            display:flex;
-            justify-content:center;
-            gap:36px;
-            flex-wrap:wrap;
-        }
-        .weather-card {
-            background:rgba(255,255,255,0.85);
-            padding:6px 18px;
-            border-radius:999px;
-            box-shadow:0 2px 12px rgba(37,99,235,0.08);
-            display:flex;
-            align-items:center;
-            gap:8px;
-        }
-        /* 文章全局可跳转样式，文字完全不变 */
+        /* 文章卡片通用样式 */
         .article-card {
             background: #ffffff;
             border: 1px solid var(--border-light);
@@ -348,13 +255,12 @@
             background:rgba(37,99,235,0.08);
             color:#2563eb;
         }
-        /* 移动端适配，仅调整布局，不改文字ID */
+        /* 移动端适配 */
         @media(max-width:1024px) {
-            .main-wrap { flex-direction: column; align-items: center; gap: 40px !important; }
-            .terminal-card { width: 100%; }
+            .main-wrap { flex-direction: column; align-items: center; }
         }
         @media(max-width:768px) {
-            .stat-item p:first-child { font-size:28px; }
+            .stat-item p:first-child { font-size:36px; }
             .date-bar {
                 gap:12px;
                 flex-direction:column;
@@ -362,127 +268,196 @@
             .audio-inner {
                 padding:12px 16px;
             }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
-    <!-- 页面漂浮装饰元素 -->
-    <div class="decor-dot" style="top: 6%; left: 7%;"></div>
-    <div class="decor-dot" style="top: 42%; right: 12%;"></div>
-    <div class="decor-dot" style="bottom: 18%; left: 16%;"></div>
-    <div class="decor-square" style="top: 34%; left: 4%; transform: rotate(12deg);"></div>
-    <div class="decor-square" style="bottom: 32%; right: 6%; transform: rotate(-18deg);"></div>
-
-    <!-- 樱花画布 -->
+    <!-- 樱花花瓣容器 -->
     <div id="sakuraWrap"></div>
-    <!-- 爱心粒子画布 -->
+    <!-- 点击爱心画布 -->
     <canvas id="heartCanvas"></canvas>
 
     <div class="page-layer">
-        <!-- 顶部实时日期 + 美化天气卡片 -->
+        <!-- 顶部日期+天气 -->
         <div class="date-bar" id="dateBox">
-            <span id="timeText"></span>
+            <span id="timeText">2026年07月05日 星期日 19:37</span>
             <div class="weather-card">
                 <i class="fas fa-cloud-sun text-primary"></i>
                 <span>保定 · 晴 24℃</span>
             </div>
         </div>
 
-        <!-- 核心主区域：左侧个人卡片 + 右侧三层终端窗口（仅迁移UI布局，所有文字完全原样保留） -->
-        <div class="wrap py-12 main-wrap flex flex-row justify-center gap-16 flex-wrap">
-            <!-- 左侧个人信息卡片，所有文字、ID、名称完全未改动 -->
-            <div class="profile-card text-center shrink-0">
-                <div class="avatar-wrap relative">
+        <!-- 顶部导航栏 匹配截图 -->
+        <div class="wrap mb-8">
+            <div class="top-nav-wrap">
+                <div class="nav-left">
+                    <div class="nick">
+                        <i class="fas fa-feather-alt text-primary"></i> 飞鸟折白梅
+                    </div>
+                    <div class="nav-links mt-1">
+                        <a href="#top">首页</a>
+                        <a href="#article">文章</a>
+                        <a href="#project">项目</a>
+                        <a href="#about">关于</a>
+                    </div>
+                </div>
+                <a href="#about" class="btn-contact">联系我</a>
+            </div>
+        </div>
+
+        <!-- 主区域：左侧固定个人竖排卡片 + 右侧文章内容 -->
+        <div class="wrap flex flex-row gap-10 main-wrap">
+            <!-- 左侧个人信息 完全复刻截图文字布局 -->
+            <div class="profile-card shrink-0">
+                <div class="avatar-wrap">
                     <div class="avatar-frame">
-                        <img src="img/tx.jpg" alt="YuHuan" loading="lazy">
+                        <img src="img/tx.jpg" alt="飞鸟折白梅" loading="lazy">
                     </div>
-                    <div class="online-badge"></div>
                 </div>
-                <h1 class="text-3xl font-bold text-primary mt-6">YuHuan</h1>
-                <p class="text-gray-500 mt-2">热爱编程与设计的创作者</p>
+                <h1 class="text-3xl font-bold">飞鸟折白梅</h1>
+                <p class="text-gray-500">热爱编程与设计的创作者</p>
                 <p class="text-gray-400 text-sm">星轨工作室室长</p>
-                <span class="tag-outline mt-4 inline-block">全栈开发者</span>
-                <h2 class="text-2xl text-gray-700 mt-8">创造美观且高性能的数字产品</h2>
-                <!-- 数据统计行 -->
-                <div class="flex justify-around mt-8 flex-wrap gap-4">
-                    <div class="stat-item text-center">
-                        <p>4</p>
-                        <p class="text-gray-400 text-sm">年经验</p>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item text-center">
-                        <p>16</p>
-                        <p class="text-gray-400 text-sm">个项目</p>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item text-center">
-                        <p>100</p>
-                        <p class="text-gray-400 text-sm">% 热情</p>
-                    </div>
+                <span class="tag-fullstack">全栈开发者</span>
+                <h2 class="text-2xl text-gray-700">创造美观且高性能的数字产品</h2>
+
+                <div class="stat-item">
+                    <p>4</p>
+                    <p class="text-gray-400">年经验</p>
                 </div>
-                <!-- 操作按钮 -->
-                <div class="flex justify-center gap-4 flex-wrap mt-8">
-                    <a href="#article" class="btn-primary flex items-center gap-2">查看作品 <i class="fa fa-arrow-right"></i></a>
-                    <a href="#about" class="btn-outline flex items-center gap-2">联系我 <i class="fa fa-envelope-o"></i></a>
+                <div class="stat-item">
+                    <p>16</p>
+                    <p class="text-gray-400">个项目</p>
                 </div>
-                <!-- 社交快捷按钮 -->
-                <div class="social-mini mt-8">
-                    <a href="#" class="social-btn"><i class="fab fa-github mr-1"></i> GitHub</a>
-                    <a href="#" class="social-btn"><i class="fab fa-qq mr-1"></i> QQ</a>
-                    <a href="#" class="social-btn"><i class="fab fa-discord mr-1"></i> discord</a>
+                <div class="stat-item">
+                    <p>100</p>
+                    <p class="text-gray-400">% 热情</p>
+                    <div class="w-full h-2 bg-gray-100 rounded-full mt-2 overflow-hidden">
+                        <div class="w-full h-full bg-primary rounded-full"></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 右侧垂直堆叠三个终端窗口，内部文字完全和截图一致，无修改 -->
-            <div class="flex flex-col gap-8">
-                <!-- 终端1 cloud-server-status 原文不变 -->
-                <div class="terminal-card">
-                    <div class="terminal-header">
-                        <span class="dot bg-red-dot"></span>
-                        <span class="dot bg-yellow-dot"></span>
-                        <span class="dot bg-green-dot"></span>
-                        <span class="terminal-title">cloud-server-status</span>
+            <!-- 右侧文章、项目、关于内容区 -->
+            <div class="flex-1">
+                <!-- 文章区域 置顶卡片保留CSDN跳转链接 -->
+                <main id="article" class="space-y-8">
+                    <h2 class="text-2xl font-bold border-l-4 border-primary pl-4">最新文章</h2>
+                    <!-- 置顶推荐文章 新开标签跳转CSDN -->
+                    <div class="article-card border-l-4 border-primary">
+                        <a href="https://blog.csdn.net/qq_22841387/article/details/147422879" target="_blank" class="article-link">
+                            <span class="tag-sm mb-4 inline-block">置顶推荐</span>
+                            <h3 class="text-xl font-bold text-gray-800 transition-colors mb-3">从零搭建轻量化个人静态博客</h3>
+                            <div class="text-gray-400 text-sm flex gap-4 mb-4 flex-wrap">
+                                <span><i class="fa fa-calendar mr-1"></i> 2026-07-05</span>
+                                <span><i class="fa fa-folder mr-1"></i> 前端开发</span>
+                                <span><i class="fa fa-eye mr-1"></i> 2143 阅读</span>
+                            </div>
+                            <p class="text-gray-600 leading-relaxed">使用 Tailwind CSS 搭建纯静态博客，搭配 Cloudflare Pages 免费托管，无需服务器和数据库，国内访问速度优化，自带动态网格背景。</p>
+                            <span class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">查看文章 <i class="fa fa-arrow-right ml-1"></i></span>
+                        </a>
                     </div>
-                    <div class="terminal-body">
-$ cat server-status.txt
-
-星轨服务监控站
-StarOrbit 服务监控站 开源免费、界面精美
-
-→ https://status.317188.xyz
+                    <!-- 普通文章2 -->
+                    <div class="article-card">
+                        <a href="#article2" class="article-link">
+                            <span class="tag-sm mb-4 inline-block">技术分享</span>
+                            <h3 class="text-xl font-bold text-gray-800 transition-colors mb-3">Tailwind CSS 国内CDN优化方案</h3>
+                            <div class="text-gray-400 text-sm flex gap-4 mb-4 flex-wrap">
+                                <span><i class="fa fa-calendar mr-1"></i> 2026-07-04</span>
+                                <span><i class="fa fa-folder mr-1"></i> 前端优化</span>
+                                <span><i class="fa fa-eye mr-1"></i> 1567 阅读</span>
+                            </div>
+                            <p class="text-gray-600">替换海外字体资源，使用国内稳定CDN，解决页面白屏、加载缓慢问题。</p>
+                            <span class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">查看文章 <i class="fa fa-arrow-right ml-1"></i></span>
+                        </a>
                     </div>
-                </div>
-                <!-- 终端2 me 原文不变 -->
-                <div class="terminal-card">
-                    <div class="terminal-header">
-                        <span class="dot bg-red-dot"></span>
-                        <span class="dot bg-yellow-dot"></span>
-                        <span class="dot bg-green-dot"></span>
-                        <span class="terminal-title">me</span>
+                    <!-- 普通文章3 -->
+                    <div class="article-card">
+                        <a href="#article3" class="article-link">
+                            <span class="tag-sm mb-4 inline-block">部署教程</span>
+                            <h3 class="text-xl font-bold text-gray-800 transition-colors mb-3">GitHub Pages + Cloudflare Pages 双平台部署</h3>
+                            <div class="text-gray-400 text-sm flex gap-4 mb-4 flex-wrap">
+                                <span><i class="fa fa-calendar mr-1"></i> 2026-07-02</span>
+                                <span><i class="fa fa-folder mr-1"></i> 部署运维</span>
+                                <span><i class="fa fa-eye mr-1"></i> 982 阅读</span>
+                            </div>
+                            <p class="text-gray-600">免费静态站点托管教程，自定义缓存规则，图片懒加载配置。</p>
+                            <span class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">查看文章 <i class="fa fa-arrow-right ml-1"></i></span>
+                        </a>
                     </div>
-                    <div class="terminal-body">
-$ cat me.txt
-
-💬 QQ联系方式
-期待与各位技术大佬一起交流学习
-
-QQ号：3171882051
+                    <!-- 分页 -->
+                    <div class="flex justify-center gap-3 py-6 items-center">
+                        <a href="#article" class="page-btn article-card px-5 py-3 text-gray-400 cursor-not-allowed">上一页</a>
+                        <a href="#article" class="page-btn active px-5 py-3 rounded-lg">1</a>
+                        <a href="#article" class="page-btn article-card px-5 py-3 rounded-lg">2</a>
+                        <a href="#article" class="page-btn article-card px-5 py-3 rounded-lg">3</a>
+                        <a href="#article" class="page-btn article-card px-5 py-3 rounded-lg">下一页</a>
                     </div>
-                </div>
-                <!-- 终端3 dev-status 循环缓慢打字动画，文本完全不变 -->
-                <div class="terminal-card">
-                    <div class="terminal-header">
-                        <span class="dot bg-red-dot"></span>
-                        <span class="dot bg-yellow-dot"></span>
-                        <span class="dot bg-green-dot"></span>
-                        <span class="terminal-title">dev-status</span>
+                    <!-- 开源项目区域 -->
+                    <div id="project" class="pt-12">
+                        <h2 class="text-2xl font-bold border-l-4 border-primary pl-4 mb-8">开源项目</h2>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="article-card p-6">
+                                <a href="https://status.317188.xyz" target="_blank" class="article-link">
+                                    <h3 class="font-bold text-lg mb-3">StarOrbit 监控面板</h3>
+                                    <p class="text-gray-500 text-sm mb-4">开源在线服务状态监控页面</p>
+                                    <span class="text-primary text-sm">查看演示</span>
+                                </a>
+                            </div>
+                            <div class="article-card p-6">
+                                <a href="#" class="article-link">
+                                    <h3 class="font-bold text-lg mb-3">轻量化博客模板</h3>
+                                    <p class="text-gray-500 text-sm mb-4">极简网格风静态个人主页</p>
+                                    <span class="text-primary text-sm">GitHub仓库</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="terminal-body type-text" id="typeBox"></div>
+                    <!-- 关于我侧边栏区域 -->
+                    <div id="about" class="pt-12 space-y-8">
+                        <h2 class="text-2xl font-bold border-l-4 border-primary pl-4">关于我</h2>
+                        <div class="article-card p-8 text-center">
+                            <div class="avatar-wrap mx-auto mb-6 w-28 h-28">
+                                <div class="avatar-frame">
+                                    <img src="img/tx.jpg" alt="飞鸟折白梅" loading="lazy">
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold">飞鸟折白梅</h3>
+                            <p class="text-gray-400 text-sm mt-2">全栈开发者 | 开源爱好者</p>
+                            <p class="text-gray-600 text-sm my-5">分享前端教程、部署优化、编程随笔，追求极简高性能页面。</p>
+                            <div class="flex justify-center gap-3">
+                                <a href="#" class="tag-sm px-4 py-2"><i class="fa fa-github"></i> GitHub</a>
+                                <a href="#" class="tag-sm px-4 py-2"><i class="fa fa-qq"></i> QQ</a>
+                                <a href="#" class="tag-sm px-4 py-2"><i class="fa fa-envelope"></i> 邮箱</a>
+                            </div>
+                        </div>
+                        <div class="article-card p-8">
+                            <h3 class="font-bold mb-6 flex items-center gap-2"><i class="fa fa-list-ul text-primary"></i> 文章分类</h3>
+                            <div class="space-y-3 text-sm text-gray-600">
+                                <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>前端开发</span><span class="text-gray-400">8</span></a>
+                                <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>前端优化</span><span class="text-gray-400">5</span></a>
+                                <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>部署运维</span><span class="text-gray-400">4</span></a>
+                                <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>工具教程</span><span class="text-gray-400">6</span></a>
+                                <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>生活随笔</span><span class="text-gray-400">3</span></a>
+                            </div>
+                        </div>
+                        <div class="article-card p-8">
+                            <h3 class="font-bold mb-6 flex items-center gap-2"><i class="fa fa-tags text-primary"></i> 热门标签</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="#article" class="tag-sm">Tailwind</a>
+                                <a href="#article" class="tag-sm">静态博客</a>
+                                <a href="#article" class="tag-sm">Cloudflare</a>
+                                <a href="#article" class="tag-sm">页面优化</a>
+                                <a href="#article" class="tag-sm">GitHub</a>
+                                <a href="#article" class="tag-sm">免费部署</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 底部内置音频播放器，删除悬浮浮窗，内置页面底部自动循环播放，ID变量完全沿用旧名不修改 -->
+        <!-- 底部内置音频播放器 -->
         <div class="audio-inner">
             <i class="fas fa-step-backward audio-btn" id="prevBtn"></i>
             <i class="fas fa-play audio-btn text-3xl" id="playBtn"></i>
@@ -496,212 +471,31 @@ QQ号：3171882051
             <audio id="audioPlayer" preload="metadata">
         </div>
 
-        <!-- 博客文章区域（全部可跳转，置顶文章绑定CSDN链接，其余文章文字、标签、标题完全原样未改动） -->
-        <main class="wrap grid grid-cols-1 lg:grid-cols-4 gap-10 py-12" id="article">
-            <div class="lg:col-span-3 space-y-8">
-                <h2 class="text-2xl font-bold border-l-4 border-primary pl-4">最新文章</h2>
-                <!-- 【修改点】置顶推荐文章卡片，点击新开标签页跳转你给的CSDN教程链接 -->
-                <div class="card-light p-8 border-l-4 border-primary article-card">
-                    <a href="https://blog.csdn.net/qq_22841387/article/details/147422879" target="_blank" class="article-link">
-                        <span class="tag-sm mb-4 inline-block">置顶推荐</span>
-                        <h3 class="text-xl font-bold text-gray-800 transition-colors mb-3">从零搭建轻量化个人静态博客</h3>
-                        <div class="text-gray-400 text-sm flex gap-4 mb-4 flex-wrap">
-                            <span><i class="fa fa-calendar mr-1"></i> 2026-07-05</span>
-                            <span><i class="fa fa-folder mr-1"></i> 前端开发</span>
-                            <span><i class="fa fa-eye mr-1"></i> 2143 阅读</span>
-                        </div>
-                        <p class="text-gray-600 leading-relaxed">使用 Tailwind CSS 搭建纯静态博客，搭配 Cloudflare Pages 免费托管，无需服务器和数据库，国内访问速度优化，自带动态网格背景。</p>
-                        <span class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">查看文章 <i class="fa fa-arrow-right ml-1"></i></span>
-                    </a>
-                </div>
-                <!-- 文章2 -->
-                <div class="card-light p-8 article-card">
-                    <a href="#article2" class="article-link">
-                        <span class="tag-sm mb-4 inline-block">技术分享</span>
-                        <h3 class="text-xl font-bold text-gray-800 transition-colors mb-3">Tailwind CSS 国内CDN优化方案</h3>
-                        <div class="text-gray-400 text-sm flex gap-4 mb-4 flex-wrap">
-                            <span><i class="fa fa-calendar mr-1"></i> 2026-07-04</span>
-                            <span><i class="fa fa-folder mr-1"></i> 前端优化</span>
-                            <span><i class="fa fa-eye mr-1"></i> 1567 阅读</span>
-                        </div>
-                        <p class="text-gray-600">替换海外字体资源，使用国内稳定CDN，解决页面白屏、加载缓慢问题。</p>
-                        <span class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">查看文章 <i class="fa fa-arrow-right ml-1"></i></span>
-                    </a>
-                </div>
-                <!-- 文章3 -->
-                <div class="card-light p-8 article-card">
-                    <a href="#article3" class="article-link">
-                        <span class="tag-sm mb-4 inline-block">部署教程</span>
-                        <h3 class="text-xl font-bold text-gray-800 transition-colors mb-3">GitHub Pages + Cloudflare Pages 双平台部署</h3>
-                        <div class="text-gray-400 text-sm flex gap-4 mb-4 flex-wrap">
-                            <span><i class="fa fa-calendar mr-1"></i> 2026-07-02</span>
-                            <span><i class="fa fa-folder mr-1"></i> 部署运维</span>
-                            <span><i class="fa fa-eye mr-1"></i> 982 阅读</span>
-                        </div>
-                        <p class="text-gray-600">免费静态站点托管教程，自定义缓存规则，图片懒加载配置。</p>
-                        <span class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">查看文章 <i class="fa fa-arrow-right ml-1"></i></span>
-                    </a>
-                </div>
-                <!-- 分页全部可点击，文字不变 -->
-                <div class="flex justify-center gap-3 py-6 items-center">
-                    <a href="#article" class="page-btn card-light px-5 py-3 text-gray-400 cursor-not-allowed">上一页</a>
-                    <a href="#article" class="page-btn active px-5 py-3 rounded-lg">1</a>
-                    <a href="#article" class="page-btn card-light px-5 py-3 rounded-lg">2</a>
-                    <a href="#article" class="page-btn card-light px-5 py-3 rounded-lg">3</a>
-                    <a href="#article" class="page-btn card-light px-5 py-3 rounded-lg">下一页</a>
-                </div>
-                <!-- 开源项目区域 可跳转 -->
-                <div id="project" class="pt-12">
-                    <h2 class="text-2xl font-bold border-l-4 border-primary pl-4 mb-8">开源项目</h2>
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div class="article-card p-6">
-                            <a href="https://status.317188.xyz" target="_blank" class="article-link">
-                                <h3 class="font-bold text-lg mb-3">StarOrbit 监控面板</h3>
-                                <p class="text-gray-500 text-sm mb-4">开源在线服务状态监控页面</p>
-                                <span class="text-primary text-sm">查看演示</span>
-                            </a>
-                        </div>
-                        <div class="article-card p-6">
-                            <a href="#" class="article-link">
-                                <h3 class="font-bold text-lg mb-3">轻量化博客模板</h3>
-                                <p class="text-gray-500 text-sm mb-4">极简网格风静态个人主页</p>
-                                <span class="text-primary text-sm">GitHub仓库</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- 侧边栏 全部标签可点击，文字ID不变 -->
-            <div class="lg:col-span-1 space-y-8" id="about">
-                <div class="card-light p-8 text-center">
-                    <div class="avatar-wrap mx-auto mb-6 w-28 h-28">
-                        <div class="avatar-frame">
-                            <img src="img/tx.jpg" alt="YuHuan" loading="lazy">
-                            <span class="online-badge"></span>
-                        </div>
-                    </div>
-                    <h3 class="text-xl font-bold">YuHuan</h3>
-                    <p class="text-gray-400 text-sm mt-2">前端开发者 | 开源爱好者</p>
-                    <p class="text-gray-600 text-sm my-5">分享前端教程、部署优化、编程随笔，追求极简高性能页面。</p>
-                    <div class="flex justify-center gap-3">
-                        <a href="#" class="social-btn"><i class="fa fa-github"></i></a>
-                        <a href="#" class="social-btn"><i class="fa fa-qq"></i></a>
-                        <a href="#" class="social-btn"><i class="fa fa-envelope"></i></a>
-                    </div>
-                </div>
-                <div class="card-light p-8">
-                    <h3 class="font-bold mb-6 flex items-center gap-2"><i class="fa fa-list-ul text-primary"></i> 文章分类</h3>
-                    <div class="space-y-3 text-sm text-gray-600">
-                        <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>前端开发</span><span class="text-gray-400">8</span></a>
-                        <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>前端优化</span><span class="text-gray-400">5</span></a>
-                        <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>部署运维</span><span class="text-gray-400">4</span></a>
-                        <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>工具教程</span><span class="text-gray-400">6</span></a>
-                        <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>生活随笔</span><span class="text-gray-400">3</span></a>
-                    </div>
-                </div>
-                <div class="card-light p-8">
-                    <h3 class="font-bold mb-6 flex items-center gap-2"><i class="fa fa-tags text-primary"></i> 热门标签</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <a href="#article" class="tag-sm">Tailwind</a>
-                        <a href="#article" class="tag-sm">静态博客</a>
-                        <a href="#article" class="tag-sm">Cloudflare</a>
-                        <a href="#article" class="tag-sm">页面优化</a>
-                        <a href="#article" class="tag-sm">GitHub</a>
-                        <a href="#article" class="tag-sm">免费部署</a>
-                    </div>
-                </div>
-            </div>
-        </main>
-
         <!-- 页脚 -->
-        <footer class="wrap glass-bar mb-8 py-8 text-center text-gray-400 text-sm">
-            <p>© 2026 YuHuan | 极简网格个人博客</p>
+        <footer class="wrap mt-12 mb-8 py-8 text-center text-gray-400 text-sm">
+            <p>© 2026 飞鸟折白梅 | 极简网格个人博客</p>
             <p class="mt-2">基于 Tailwind CSS 静态构建 · Cloudflare Pages托管</p>
         </footer>
     </div>
 
 <script>
-// 1. dev-status终端 缓慢循环打字动画，文本完全不变
-const devText = `$ npm run dev |
-✓ Local: http://localhost:3000
-→ Network: http://192.168.1.100:3000
-⚡ ready in 420ms`;
-const typeBox = document.getElementById('typeBox');
-let charIndex = 0;
-function typeWrite(){
-    if(charIndex < devText.length){
-        typeBox.innerText = devText.slice(0,charIndex+1);
-        charIndex++;
-        setTimeout(typeWrite,80);
-    }else{
-        setTimeout(()=>{
-            charIndex = 0;
-            typeBox.innerText = "";
-            typeWrite();
-        },2000);
-    }
-}
-typeWrite();
-
-// 2. 全局原生点击音效（稳定无依赖）
-function createClickSound(){
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    return function playSound(){
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.08);
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.08);
-    }
-}
-const playClick = createClickSound();
-document.addEventListener('click',e=>{
-    const target = e.target;
-    const clickable = ['A','BUTTON','I','SPAN','DIV','INPUT'];
-    if(clickable.includes(target.tagName) || target.closest('a,.audio-btn,.social-btn,.tag-sm,.btn-primary,.btn-outline,.card-light,.page-btn')){
-        playClick();
-    }
-});
-
-// 3. 原生樱花飘落
+// 1. 樱花花瓣自动生成漂浮
 const sakuraWrap = document.getElementById('sakuraWrap');
 function createSakura() {
     const petal = document.createElement('div');
-    petal.className = 'sakura';
-    const size = Math.random() * 14 + 6;
+    petal.className = 'sakura-petal';
+    const size = Math.random() * 12 + 6;
     petal.style.width = size + 'px';
     petal.style.height = size + 'px';
     petal.style.left = Math.random() * 100 + 'vw';
-    const fallTime = Math.random() * 6 + 3;
+    const fallTime = Math.random() * 8 + 4;
     petal.style.animationDuration = fallTime + 's';
     sakuraWrap.appendChild(petal);
     setTimeout(() => petal.remove(), fallTime * 1000);
 }
-setInterval(createSakura, 100);
+setInterval(createSakura, 300);
 
-// 4. 顶部实时日期
-function updateDate(){
-    const now = new Date();
-    const weekArr = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
-    const year = now.getFullYear();
-    const month = String(now.getMonth()+1).padStart(2,'0');
-    const day = String(now.getDate()).padStart(2,'0');
-    const week = weekArr[now.getDay()];
-    const hour = String(now.getHours()).padStart(2,'0');
-    const min = String(now.getMinutes()).padStart(2,'0');
-    const timeStr = `${year}年${month}月${day}日 ${week} ${hour}:${min}`;
-    document.getElementById('timeText').innerText = timeStr;
-}
-updateDate();
-setInterval(updateDate,1000);
-
-// 5. 粉色爱心鼠标粒子
+// 2. 鼠标点击粉色爱心粒子
 const canvas = document.getElementById('heartCanvas');
 const ctx = canvas.getContext('2d');
 function resizeCanvas() {
@@ -751,7 +545,7 @@ class HeartParticle {
             ctx.lineTo(heartVertex[i].x, heartVertex[i].y);
         }
         ctx.closePath();
-        ctx.fillStyle = `rgba(255, 102, 168, ${this.alpha})`;
+        ctx.fillStyle = `rgba(255, 80, 140, ${this.alpha})`;
         ctx.fill();
         ctx.restore();
     }
@@ -759,8 +553,6 @@ class HeartParticle {
 document.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
-    heartList.push(new HeartParticle(mouse.x, mouse.y));
-    if (heartList.length > 28) heartList.shift();
 });
 document.addEventListener('click', (e) => {
     for (let i = 0; i < 12; i++) {
@@ -781,7 +573,49 @@ function renderLoop() {
 }
 renderLoop();
 
-// 6. 内置页面底部音频播放器，沿用原有ID变量，删除悬浮浮窗，自动循环播放
+// 3. 全局原生点击音效
+function createClickSound(){
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return function playSound(){
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+    }
+}
+const playClick = createClickSound();
+document.addEventListener('click',e=>{
+    const target = e.target;
+    const clickable = ['A','BUTTON','I','SPAN','DIV','INPUT'];
+    if(clickable.includes(target.tagName) || target.closest('a,.audio-btn,.tag-sm,.btn-contact,.article-card,.page-btn')){
+        playClick();
+    }
+});
+
+// 4. 顶部实时日期更新
+function updateDate(){
+    const now = new Date();
+    const weekArr = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+    const year = now.getFullYear();
+    const month = String(now.getMonth()+1).padStart(2,'0');
+    const day = String(now.getDate()).padStart(2,'0');
+    const week = weekArr[now.getDay()];
+    const hour = String(now.getHours()).padStart(2,'0');
+    const min = String(now.getMinutes()).padStart(2,'0');
+    const timeStr = `${year}年${month}月${day}日 ${week} ${hour}:${min}`;
+    document.getElementById('timeText').innerText = timeStr;
+}
+updateDate();
+setInterval(updateDate,1000);
+
+// 5. 底部内置音频播放器逻辑
 const audio = document.getElementById('audioPlayer');
 const playBtn = document.getElementById('playBtn');
 const prevBtn = document.getElementById('prevBtn');
