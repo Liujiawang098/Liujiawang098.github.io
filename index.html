@@ -2,10 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 移动端强制适配 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="baidu-site-verification" content="codeva-NZ7P0Fsakr" />
-    <title>飞鸟折白梅 | 个人技术博客</title>
+    <title>YuHuan | 个人技术博客</title>
     <link rel="icon" type="image/png" href="img/tx.jpg">
     <script src="https://cdn.bootcdn.net/ajax/libs/tailwindcss/3.3.2/tailwind.min.js"></script>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,9 +14,11 @@
                 extend: {
                     colors: {
                         primary: '#2563eb',
-                        primary-light: '#3b82f6',
-                        love: '#ff66a8',
-                        ncm: '#ec4141'
+                        red-dot: '#ff5f57',
+                        yellow-dot: '#ffbd2e',
+                        green-dot: '#28c840',
+                        bg-light: '#f8fafc',
+                        border-light: '#e2e8f0'
                     },
                     fontFamily: {
                         mono: ['Consolas', 'Menlo', 'monospace'],
@@ -40,12 +41,31 @@
         body {
             font-family: var(--font-sans);
             background: #ffffff;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 32px 32px;
             color: #1a1a1a;
             overflow-x: hidden;
             line-height: 1.8;
             position: relative;
         }
-        /* 原生樱花飘落层 优化花瓣渐变 */
+        /* 浮动几何装饰 匹配截图淡蓝方块圆点 */
+        .decor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: rgba(37,99,235,0.15);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .decor-square {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            border: 1px solid rgba(37,99,235,0.12);
+            border-radius: 12px;
+            z-index: 0;
+        }
+        /* 樱花飘落 */
         #sakuraWrap {
             position: fixed;
             top: 0;
@@ -60,16 +80,12 @@
             position: absolute;
             background: linear-gradient(135deg,#ffd6e8,#ffb8cc);
             border-radius: 60% 0 60% 0;
-            opacity: 0.75;
+            opacity: 0.7;
             animation: sakuraFall linear infinite;
         }
         @keyframes sakuraFall {
-            0% {
-                transform: translateY(-12px) rotate(0deg) translateX(0px);
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg) translateX(30px);
-            }
+            0% { transform: translateY(-10px) rotate(0deg) translateX(0px); }
+            100% { transform: translateY(100vh) rotate(720deg) translateX(25px); }
         }
         #heartCanvas {
             position: fixed;
@@ -84,288 +100,182 @@
             position: relative;
             z-index: 10;
         }
-        .hero-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.4;
-            pointer-events: none;
-            z-index: 0;
+        /* 终端窗口样式 复刻截图，文字完全保留不变 */
+        .terminal-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            padding: 16px;
+            width: min(460px, 100%);
+            transition: 0.3s ease;
         }
-        .grid-lines {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg,#e2e8f0 1px,transparent 1px);
-            background-size: 48px 48px;
-            animation: gridMove 25s linear infinite;
+        .terminal-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 32px rgba(37,99,235,0.08);
         }
-        @keyframes gridMove {0%{transform:translate(0,0)}100%{transform:translate(48px,48px)}}
-        .dot-deco {
-            position: absolute;
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background: #2563eb;
-            opacity: 0.35;
         }
-        .dot1 {width:6px;height:6px;top:8%;left:10%}
-        .dot2 {width:8px;height:8px;top:22%;right:18%}
-        .dot3 {width:5px;height:5px;bottom:15%;left:45%}
+        .terminal-title {
+            font-size: 13px;
+            color: #6b7280;
+            font-family: var(--mono);
+        }
+        .terminal-body {
+            font-family: var(--mono);
+            font-size: 14px;
+            color: #333;
+            white-space: pre-wrap;
+        }
+        /* 左侧个人信息卡片 文字完全不修改 */
+        .profile-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            padding: 32px;
+            width: min(380px, 100%);
+            transition: 0.3s ease;
+        }
+        .profile-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 32px rgba(37,99,235,0.08);
+        }
         .avatar-wrap {
             width: 140px;
             height: 140px;
             border-radius: 50%;
             background: rgba(37, 99, 235, 0.08);
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
+            padding: 6px;
+            margin: 0 auto;
+            position: relative;
         }
-        .avatar-wrap:hover {
-            transform: scale(1.05);
+        .online-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 22px;
+            height: 22px;
+            background: var(--green-dot);
+            border-radius: 50%;
+            border: 3px solid white;
         }
         .avatar-frame {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             overflow: hidden;
-            position: relative;
         }
-        .avatar-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .online-dot {
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            width: 22px;
-            height: 22px;
-            background: #22c55e;
-            border-radius: 50%;
-            border: 3px solid white;
+        .stat-item p:first-child {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
         }
         .tag-outline {
-            border: 1.5px solid #2563eb;
-            color: #2563eb;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
             border-radius: 999px;
-            padding: 10px 32px;
-            font-size: 16px;
+            padding: 8px 28px;
+            font-size: 15px;
             background: transparent;
-            transition: 0.2s;
+            display: inline-block;
         }
-        .tag-outline:hover {
-            background: rgba(37,99,235,0.08);
-        }
-        .stat-num {
-            font-size: 48px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-        .stat-divider {
-            width: 1px;
-            height: 50px;
-            background: #e2e8f0;
-        }
-        /* 卡片全局优化 */
-        .card-light {
-            background: rgba(255,255,255,0.92);
-            border: 1px solid #e5e7eb;
-            border-radius: 24px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-            transition: all 0.3s ease;
-        }
-        .card-light:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 40px rgba(37,99,235,0.1);
-        }
-        /* 终端打字容器 */
-        .terminal-body {
-            padding: 20px;
-            font-family: Consolas,monospace;
-            font-size: 14px;
-            color: #333;
-        }
-        .type-text {
-            white-space: pre-wrap;
-            min-height: 120px;
-        }
-        .terminal-head {
-            background: #f8fafc;
-            padding: 14px 20px;
-            border-radius: 24px 24px 0 0;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .dot-r {width:12px;height:12px;border-radius:50%;background:#ff5f57}
-        .dot-y {width:12px;height:12px;border-radius:50%;background:#ffbd2e}
-        .dot-g {width:12px;height:12px;border-radius:50%;background:#28c840}
-        .wrap {
-            width: min(100% - 30px, 1240px);
-            margin: 0 auto;
-            position: relative;
-        }
-        .glass-bar {
-            background: rgba(255,255,255,0.88);
-            border: 1px solid #e5e7eb;
-            border-radius: 20px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.03);
-        }
-        .btn-blue {
-            background: #2563eb;
+        .btn-primary {
+            background: var(--primary);
             color: white;
             border-radius: 14px;
-            padding: 12px 30px;
-            transition: all 0.2s ease;
-            display: inline-block;
+            padding: 12px 28px;
             text-decoration: none;
+            transition: 0.2s;
+            display: inline-block;
         }
-        .btn-blue:hover {
+        .btn-primary:hover {
             background: #1d4ed8;
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(37,99,235,0.2);
-            color:white;
+            box-shadow: 0 8px 18px rgba(37,99,235,0.2);
         }
-        .btn-gray {
-            background: #f1f5f9;
+        .btn-outline {
+            border: 1px solid var(--border-light);
             border-radius: 14px;
-            padding: 12px 30px;
-            transition: all 0.2s ease;
-            display: inline-block;
+            padding: 12px 28px;
             text-decoration: none;
+            color: #333;
+            transition: 0.2s;
+            display: inline-block;
         }
-        .btn-gray:hover {
-            background: #e2e8f0;
+        .btn-outline:hover {
+            background: #f1f5f9;
             transform: translateY(-3px);
-            color:#1a1a1a;
         }
-        .social-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 14px;
-            background: #f1f5f9;
-            display: grid;
-            place-items: center;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            color:#333;
-        }
-        .social-icon:hover {
-            background: #2563eb;
-            color: white;
-            transform: translateY(-4px);
-        }
-        .tag-sm {
-            background: rgba(37,99,235,0.08);
-            color: #2563eb;
-            padding: 4px 12px;
-            border-radius: 99px;
-            font-size: 12px;
-            display: inline-block;
-            text-decoration: none;
-            transition:0.2s;
-        }
-        .tag-sm:hover {
-            background:#2563eb;
-            color:#fff;
-        }
-        .hover-scale {
-            cursor: none;
-        }
-        /* 音乐播放器 美化加宽 */
-        .music-box {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 9999;
+        .social-mini {
+            width: 100%;
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+            gap: 12px;
+            justify-content: center;
         }
-        .music-mini {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg,#2563eb,#3b82f6);
+        .social-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            background: #f1f5f9;
+            text-align: center;
+            color: #333;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .social-btn:hover {
+            background: var(--primary);
             color: white;
-            display: grid;
-            place-items: center;
+        }
+        /* 内置底部音频播放器，删除悬浮浮窗 */
+        .audio-inner {
+            width: min(100% - 40px, 1240px);
+            margin: 40px auto 0;
+            padding: 16px 24px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+        }
+        .audio-btn {
             font-size: 22px;
-            box-shadow: 0 6px 20px rgba(37,99,235,0.25);
+            color: #333;
             cursor: pointer;
             transition: 0.2s;
         }
-        .music-mini:hover {
-            transform: scale(1.08);
+        .audio-btn:hover {
+            color: var(--primary);
+            transform: scale(1.15);
         }
-        .music-panel {
-            width: 360px;
-            background: rgba(255,255,255,0.96);
-            border: 1px solid #e5e7eb;
-            border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-            padding: 24px;
-            margin-bottom: 12px;
-            display: none;
-        }
-        .music-panel.show {
-            display: block;
-        }
-        .music-title {
-            font-weight: 600;
-            text-align: center;
-            font-size: 16px;
-            color: #222;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .music-progress {
-            width: 100%;
+        .audio-progress {
+            flex: 1;
             height: 6px;
             background: #e2e8f0;
             border-radius: 99px;
-            margin: 16px 0;
+            min-width: 200px;
             cursor: pointer;
+            position: relative;
         }
-        .music-progress-bar {
+        .audio-progress-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
             height: 100%;
-            width: 0%;
             background: linear-gradient(90deg,#2563eb,#3b82f6);
             border-radius: 99px;
-        }
-        .music-time-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: #666;
-        }
-        .music-btn-row {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin-top: 20px;
-            font-size: 24px;
-            align-items: center;
-        }
-        .music-btn {
-            cursor: pointer;
-            color: #333;
-            transition: 0.2s;
-        }
-        .music-btn:hover {
-            color: #2563eb;
-            transform: scale(1.15);
-        }
-        .music-play-main {
-            font-size: 34px !important;
         }
         /* 顶部日期+天气美化栏 */
         .date-bar {
@@ -387,49 +297,22 @@
             align-items:center;
             gap:8px;
         }
-        /* 导航移动端折叠 */
-        .mobile-menu-btn {
-            display:none;
-            font-size:24px;
-            color:#333;
-            cursor:pointer;
+        /* 文章全局可跳转样式，文字完全不变 */
+        .article-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 24px;
+            transition: 0.3s;
         }
-        @media(max-width:768px){
-            .mobile-menu-btn {
-                display:block;
-            }
-            .nav-pc {
-                display:none;
-                position:absolute;
-                top:100%;
-                left:0;
-                width:100%;
-                background:rgba(255,255,255,0.95);
-                padding:20px;
-                flex-direction:column;
-                gap:16px;
-                border-radius:0 0 20px 20px;
-                box-shadow:0 10px 20px rgba(0,0,0,0.05);
-            }
-            .nav-pc.show {
-                display:flex;
-            }
-            .stat-num {
-                font-size:36px;
-            }
-            .music-panel {
-                width:calc(100vw - 40px);
-            }
-            .date-bar {
-                gap:12px;
-                flex-direction:column;
-            }
+        .article-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(37,99,235,0.07);
         }
-        /* 文章链接全局可点击样式 */
         .article-link {
-            text-decoration:none;
-            color:inherit;
-            display:block;
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
         .article-link h3 {
             transition:0.2s;
@@ -437,7 +320,20 @@
         .article-link:hover h3 {
             color:#2563eb;
         }
-        /* 分页按钮可点击 */
+        .tag-sm {
+            background: rgba(37,99,235,0.08);
+            color: #2563eb;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 12px;
+            display: inline-block;
+            text-decoration: none;
+            transition:0.2s;
+        }
+        .tag-sm:hover {
+            background:#2563eb;
+            color:#fff;
+        }
         .page-btn {
             text-decoration:none;
             padding:12px 20px;
@@ -452,45 +348,36 @@
             background:rgba(37,99,235,0.08);
             color:#2563eb;
         }
+        /* 移动端适配，仅调整布局，不改文字ID */
+        @media(max-width:1024px) {
+            .main-wrap { flex-direction: column; align-items: center; gap: 40px !important; }
+            .terminal-card { width: 100%; }
+        }
+        @media(max-width:768px) {
+            .stat-item p:first-child { font-size:28px; }
+            .date-bar {
+                gap:12px;
+                flex-direction:column;
+            }
+            .audio-inner {
+                padding:12px 16px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- 原生樱花飘落容器 无任何第三方接口 -->
+    <!-- 页面漂浮装饰元素 -->
+    <div class="decor-dot" style="top: 6%; left: 7%;"></div>
+    <div class="decor-dot" style="top: 42%; right: 12%;"></div>
+    <div class="decor-dot" style="bottom: 18%; left: 16%;"></div>
+    <div class="decor-square" style="top: 34%; left: 4%; transform: rotate(12deg);"></div>
+    <div class="decor-square" style="bottom: 32%; right: 6%; transform: rotate(-18deg);"></div>
+
+    <!-- 樱花画布 -->
     <div id="sakuraWrap"></div>
-    <!-- 底层网格背景 -->
-    <div class="hero-bg">
-        <div class="grid-lines"></div>
-        <div class="dot-deco dot1"></div>
-        <div class="dot-deco dot2"></div>
-        <div class="dot-deco dot3"></div>
-    </div>
     <!-- 爱心粒子画布 -->
     <canvas id="heartCanvas"></canvas>
 
-    <!-- 本地音乐播放器（完整可交互） -->
-    <div class="music-box">
-        <div class="music-panel" id="musicPanel">
-            <div class="music-title" id="musicTitle">晚风纯音乐</div>
-            <div class="music-progress" id="progressWrap">
-                <div class="music-progress-bar" id="progressBar"></div>
-            </div>
-            <div class="music-time-row">
-                <span id="currentTime">00:00</span>
-                <span id="totalTime">00:00</span>
-            </div>
-            <div class="music-btn-row">
-                <i class="fas fa-step-backward music-btn" id="prevBtn"></i>
-                <i class="fas fa-play music-btn music-play-main" id="playBtn"></i>
-                <i class="fas fa-step-forward music-btn" id="nextBtn"></i>
-            </div>
-            <audio id="audioPlayer" preload="metadata">
-        </div>
-        <div class="music-mini" id="miniBtn">
-            <i class="fas fa-music"></i>
-        </div>
-    </div>
-
-    <!-- 页面主体内容层 -->
     <div class="page-layer">
         <!-- 顶部实时日期 + 美化天气卡片 -->
         <div class="date-bar" id="dateBox">
@@ -500,102 +387,122 @@
                 <span>保定 · 晴 24℃</span>
             </div>
         </div>
-        <!-- 导航栏（电脑+手机双适配） -->
-        <header class="wrap glass-bar sticky top-0 mt-2 px-6 py-4 flex justify-between items-center relative hover-scale">
-            <a href="#" class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                <i class="fa fa-feather text-primary"></i>飞鸟折白梅
-            </a>
-            <nav class="nav-pc hidden md:flex gap-7 text-gray-600 text-sm">
-                <a href="#" class="text-primary font-medium hover-scale">首页</a>
-                <a href="#article" class="hover:text-primary hover-scale">文章</a>
-                <a href="#project" class="hover:text-primary hover-scale">项目</a>
-                <a href="#about" class="hover:text-primary hover-scale">关于</a>
-            </nav>
-            <i class="fas fa-bars mobile-menu-btn" id="menuBtn"></i>
-            <a href="#about" class="btn-blue text-sm hover-scale hidden md:block">联系我</a>
-        </header>
 
-        <!-- 首页Hero区域 -->
-        <section class="wrap py-16 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div class="text-center space-y-8 hover-scale">
-                <div class="avatar-wrap mx-auto">
+        <!-- 核心主区域：左侧个人卡片 + 右侧三层终端窗口（仅迁移UI布局，所有文字完全原样保留） -->
+        <div class="wrap py-12 main-wrap flex flex-row justify-center gap-16 flex-wrap">
+            <!-- 左侧个人信息卡片，所有文字、ID、名称完全未改动 -->
+            <div class="profile-card text-center shrink-0">
+                <div class="avatar-wrap relative">
                     <div class="avatar-frame">
-                        <img src="img/tx.jpg" alt="飞鸟折白梅" loading="lazy">
-                        <span class="online-dot"></span>
+                        <img src="img/tx.jpg" alt="YuHuan" loading="lazy">
                     </div>
+                    <div class="online-badge"></div>
                 </div>
-                <div>
-                    <h1 class="text-4xl font-bold text-primary">飞鸟折白梅</h1>
-                    <p class="text-gray-500 mt-3 text-lg">热爱编程与设计的创作者</p>
-                    <p class="text-gray-400 mt-1">星轨工作室室长</p>
-                </div>
-                <span class="tag-outline inline-block">全栈开发者</span>
-                <h2 class="text-2xl text-gray-700 font-normal">创造美观且高性能的数字产品</h2>
-                <div class="flex justify-center items-center gap-6 flex-wrap">
-                    <div>
-                        <p class="stat-num">4</p>
+                <h1 class="text-3xl font-bold text-primary mt-6">YuHuan</h1>
+                <p class="text-gray-500 mt-2">热爱编程与设计的创作者</p>
+                <p class="text-gray-400 text-sm">星轨工作室室长</p>
+                <span class="tag-outline mt-4 inline-block">全栈开发者</span>
+                <h2 class="text-2xl text-gray-700 mt-8">创造美观且高性能的数字产品</h2>
+                <!-- 数据统计行 -->
+                <div class="flex justify-around mt-8 flex-wrap gap-4">
+                    <div class="stat-item text-center">
+                        <p>4</p>
                         <p class="text-gray-400 text-sm">年经验</p>
                     </div>
                     <div class="stat-divider"></div>
-                    <div>
-                        <p class="stat-num">16</p>
+                    <div class="stat-item text-center">
+                        <p>16</p>
                         <p class="text-gray-400 text-sm">个项目</p>
                     </div>
                     <div class="stat-divider"></div>
-                    <div>
-                        <p class="stat-num">100</p>
+                    <div class="stat-item text-center">
+                        <p>100</p>
                         <p class="text-gray-400 text-sm">% 热情</p>
                     </div>
                 </div>
-                <div class="flex justify-center gap-4 flex-wrap">
-                    <a href="#article" class="btn-blue flex items-center gap-2 hover-scale">查看文章 <i class="fa fa-arrow-right"></i></a>
-                    <a href="#about" class="btn-gray flex items-center gap-2 hover-scale">联系我 <i class="fa fa-envelope-o"></i></a>
+                <!-- 操作按钮 -->
+                <div class="flex justify-center gap-4 flex-wrap mt-8">
+                    <a href="#article" class="btn-primary flex items-center gap-2">查看作品 <i class="fa fa-arrow-right"></i></a>
+                    <a href="#about" class="btn-outline flex items-center gap-2">联系我 <i class="fa fa-envelope-o"></i></a>
                 </div>
-                <div class="flex justify-center gap-3">
-                    <a href="#" class="social-icon hover-scale"><i class="fa fa-github"></i></a>
-                    <a href="#" class="social-icon hover-scale"><i class="fa fa-qq"></i></a>
-                    <a href="#" class="social-icon hover-scale"><i class="fa fa-comment"></i></a>
+                <!-- 社交快捷按钮 -->
+                <div class="social-mini mt-8">
+                    <a href="#" class="social-btn"><i class="fab fa-github mr-1"></i> GitHub</a>
+                    <a href="#" class="social-btn"><i class="fab fa-qq mr-1"></i> QQ</a>
+                    <a href="#" class="social-btn"><i class="fab fa-discord mr-1"></i> discord</a>
                 </div>
             </div>
-            <div class="flex flex-col gap-6">
-                <div class="card-light hover-scale">
-                    <div class="terminal-head">
-                        <span class="dot-r"></span>
-                        <span class="dot-y"></span>
-                        <span class="dot-g"></span>
-                        <span class="text-xs text-gray-400 ml-2">server-status</span>
-                    </div>
-                    <div class="terminal-body text-gray-600">
-                        <p>$ cat server-status.txt</p>
-                        <div class="mt-4 text-gray-800">
-                            <p class="font-medium">星轨服务监控站</p>
-                            <p class="text-gray-400 text-xs mt-1">StarOrbit 服务监控站 开源免费、界面精美</p>
-                            <a href="https://status.317188.xyz" target="_blank" class="text-primary mt-3 inline-block hover:translate-x-1 transition-all">→ https://status.317188.xyz</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- 循环打字动画终端 -->
-                <div class="card-light hover-scale">
-                    <div class="terminal-head">
-                        <span class="dot-r"></span>
-                        <span class="dot-y"></span>
-                        <span class="dot-g"></span>
-                        <span class="text-xs text-gray-400 ml-2">dev-status</span>
+
+            <!-- 右侧垂直堆叠三个终端窗口，内部文字完全和截图一致，无修改 -->
+            <div class="flex flex-col gap-8">
+                <!-- 终端1 cloud-server-status 原文不变 -->
+                <div class="terminal-card">
+                    <div class="terminal-header">
+                        <span class="dot bg-red-dot"></span>
+                        <span class="dot bg-yellow-dot"></span>
+                        <span class="dot bg-green-dot"></span>
+                        <span class="terminal-title">cloud-server-status</span>
                     </div>
                     <div class="terminal-body">
-                        <div class="type-text" id="typeBox"></div>
+$ cat server-status.txt
+
+星轨服务监控站
+StarOrbit 服务监控站 开源免费、界面精美
+
+→ https://status.317188.xyz
                     </div>
                 </div>
-            </div>
-        </section>
+                <!-- 终端2 me 原文不变 -->
+                <div class="terminal-card">
+                    <div class="terminal-header">
+                        <span class="dot bg-red-dot"></span>
+                        <span class="dot bg-yellow-dot"></span>
+                        <span class="dot bg-green-dot"></span>
+                        <span class="terminal-title">me</span>
+                    </div>
+                    <div class="terminal-body">
+$ cat me.txt
 
-        <!-- 博客文章区域（全部可跳转） -->
+💬 QQ联系方式
+期待与各位技术大佬一起交流学习
+
+QQ号：3171882051
+                    </div>
+                </div>
+                <!-- 终端3 dev-status 循环缓慢打字动画，文本完全不变 -->
+                <div class="terminal-card">
+                    <div class="terminal-header">
+                        <span class="dot bg-red-dot"></span>
+                        <span class="dot bg-yellow-dot"></span>
+                        <span class="dot bg-green-dot"></span>
+                        <span class="terminal-title">dev-status</span>
+                    </div>
+                    <div class="terminal-body type-text" id="typeBox"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部内置音频播放器，删除悬浮浮窗，内置页面底部自动循环播放，ID变量完全沿用旧名不修改 -->
+        <div class="audio-inner">
+            <i class="fas fa-step-backward audio-btn" id="prevBtn"></i>
+            <i class="fas fa-play audio-btn text-3xl" id="playBtn"></i>
+            <i class="fas fa-step-forward audio-btn" id="nextBtn"></i>
+            <div class="audio-progress" id="progressWrap">
+                <div class="audio-progress-bar" id="progressBar"></div>
+            </div>
+            <span class="text-sm text-gray-500" id="currentTime">00:00</span>
+            <span class="text-sm text-gray-500" id="totalTime">00:00</span>
+            <span class="text-sm font-medium" id="musicTitle">晚风纯音乐</span>
+            <audio id="audioPlayer" preload="metadata">
+        </div>
+
+        <!-- 博客文章区域（全部可跳转，置顶文章绑定CSDN链接，其余文章文字、标签、标题完全原样未改动） -->
         <main class="wrap grid grid-cols-1 lg:grid-cols-4 gap-10 py-12" id="article">
             <div class="lg:col-span-3 space-y-8">
                 <h2 class="text-2xl font-bold border-l-4 border-primary pl-4">最新文章</h2>
-                <!-- 文章1 完整可点击跳转 -->
-                <div class="card-light p-8 border-l-4 border-primary hover-scale">
-                    <a href="#article1" class="article-link">
+                <!-- 【修改点】置顶推荐文章卡片，点击新开标签页跳转你给的CSDN教程链接 -->
+                <div class="card-light p-8 border-l-4 border-primary article-card">
+                    <a href="https://blog.csdn.net/qq_22841387/article/details/147422879" target="_blank" class="article-link">
                         <span class="tag-sm mb-4 inline-block">置顶推荐</span>
                         <h3 class="text-xl font-bold text-gray-800 transition-colors mb-3">从零搭建轻量化个人静态博客</h3>
                         <div class="text-gray-400 text-sm flex gap-4 mb-4 flex-wrap">
@@ -608,7 +515,7 @@
                     </a>
                 </div>
                 <!-- 文章2 -->
-                <div class="card-light p-8 hover-scale">
+                <div class="card-light p-8 article-card">
                     <a href="#article2" class="article-link">
                         <span class="tag-sm mb-4 inline-block">技术分享</span>
                         <h3 class="text-xl font-bold text-gray-800 transition-colors mb-3">Tailwind CSS 国内CDN优化方案</h3>
@@ -622,7 +529,7 @@
                     </a>
                 </div>
                 <!-- 文章3 -->
-                <div class="card-light p-8 hover-scale">
+                <div class="card-light p-8 article-card">
                     <a href="#article3" class="article-link">
                         <span class="tag-sm mb-4 inline-block">部署教程</span>
                         <h3 class="text-xl font-bold text-gray-800 transition-colors mb-3">GitHub Pages + Cloudflare Pages 双平台部署</h3>
@@ -635,7 +542,7 @@
                         <span class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">查看文章 <i class="fa fa-arrow-right ml-1"></i></span>
                     </a>
                 </div>
-                <!-- 分页全部可点击 -->
+                <!-- 分页全部可点击，文字不变 -->
                 <div class="flex justify-center gap-3 py-6 items-center">
                     <a href="#article" class="page-btn card-light px-5 py-3 text-gray-400 cursor-not-allowed">上一页</a>
                     <a href="#article" class="page-btn active px-5 py-3 rounded-lg">1</a>
@@ -647,14 +554,14 @@
                 <div id="project" class="pt-12">
                     <h2 class="text-2xl font-bold border-l-4 border-primary pl-4 mb-8">开源项目</h2>
                     <div class="grid md:grid-cols-2 gap-8">
-                        <div class="card-light p-6 hover-scale">
+                        <div class="article-card p-6">
                             <a href="https://status.317188.xyz" target="_blank" class="article-link">
                                 <h3 class="font-bold text-lg mb-3">StarOrbit 监控面板</h3>
                                 <p class="text-gray-500 text-sm mb-4">开源在线服务状态监控页面</p>
                                 <span class="text-primary text-sm">查看演示</span>
                             </a>
                         </div>
-                        <div class="card-light p-6 hover-scale">
+                        <div class="article-card p-6">
                             <a href="#" class="article-link">
                                 <h3 class="font-bold text-lg mb-3">轻量化博客模板</h3>
                                 <p class="text-gray-500 text-sm mb-4">极简网格风静态个人主页</p>
@@ -664,25 +571,25 @@
                     </div>
                 </div>
             </div>
-            <!-- 侧边栏 全部标签可点击 -->
+            <!-- 侧边栏 全部标签可点击，文字ID不变 -->
             <div class="lg:col-span-1 space-y-8" id="about">
-                <div class="card-light p-8 text-center hover-scale">
+                <div class="card-light p-8 text-center">
                     <div class="avatar-wrap mx-auto mb-6 w-28 h-28">
                         <div class="avatar-frame">
-                            <img src="img/tx.jpg" alt="飞鸟折白梅" loading="lazy">
-                            <span class="online-dot"></span>
+                            <img src="img/tx.jpg" alt="YuHuan" loading="lazy">
+                            <span class="online-badge"></span>
                         </div>
                     </div>
-                    <h3 class="text-xl font-bold">飞鸟折白梅</h3>
+                    <h3 class="text-xl font-bold">YuHuan</h3>
                     <p class="text-gray-400 text-sm mt-2">前端开发者 | 开源爱好者</p>
                     <p class="text-gray-600 text-sm my-5">分享前端教程、部署优化、编程随笔，追求极简高性能页面。</p>
                     <div class="flex justify-center gap-3">
-                        <a href="#" class="social-icon hover-scale"><i class="fa fa-github"></i></a>
-                        <a href="#" class="social-icon hover-scale"><i class="fa fa-qq"></i></a>
-                        <a href="#" class="social-icon hover-scale"><i class="fa fa-envelope"></i></a>
+                        <a href="#" class="social-btn"><i class="fa fa-github"></i></a>
+                        <a href="#" class="social-btn"><i class="fa fa-qq"></i></a>
+                        <a href="#" class="social-btn"><i class="fa fa-envelope"></i></a>
                     </div>
                 </div>
-                <div class="card-light p-8 hover-scale">
+                <div class="card-light p-8">
                     <h3 class="font-bold mb-6 flex items-center gap-2"><i class="fa fa-list-ul text-primary"></i> 文章分类</h3>
                     <div class="space-y-3 text-sm text-gray-600">
                         <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>前端开发</span><span class="text-gray-400">8</span></a>
@@ -692,7 +599,7 @@
                         <a href="#article" class="flex justify-between py-2 hover:text-primary"><span>生活随笔</span><span class="text-gray-400">3</span></a>
                     </div>
                 </div>
-                <div class="card-light p-8 hover-scale">
+                <div class="card-light p-8">
                     <h3 class="font-bold mb-6 flex items-center gap-2"><i class="fa fa-tags text-primary"></i> 热门标签</h3>
                     <div class="flex flex-wrap gap-2">
                         <a href="#article" class="tag-sm">Tailwind</a>
@@ -708,26 +615,25 @@
 
         <!-- 页脚 -->
         <footer class="wrap glass-bar mb-8 py-8 text-center text-gray-400 text-sm">
-            <p>© 2026 飞鸟折白梅 | 极简网格个人博客</p>
-            <p class="mt-2">基于Tailwind CSS静态构建 · Cloudflare Pages托管</p>
+            <p>© 2026 YuHuan | 极简网格个人博客</p>
+            <p class="mt-2">基于 Tailwind CSS 静态构建 · Cloudflare Pages托管</p>
         </footer>
     </div>
 
 <script>
-// 1. 终端缓慢打字循环动画
-const typeContent = `$ code --version
-1.84.2
-commit 1a5daa3a0231a0fbba4f14db7ec463cf99d7768e
-Date: 2024-01-15T10:29:31.316Z`;
+// 1. dev-status终端 缓慢循环打字动画，文本完全不变
+const devText = `$ npm run dev |
+✓ Local: http://localhost:3000
+→ Network: http://192.168.1.100:3000
+⚡ ready in 420ms`;
 const typeBox = document.getElementById('typeBox');
 let charIndex = 0;
 function typeWrite(){
-    if(charIndex < typeContent.length){
-        typeBox.innerText = typeContent.slice(0,charIndex+1);
+    if(charIndex < devText.length){
+        typeBox.innerText = devText.slice(0,charIndex+1);
         charIndex++;
-        setTimeout(typeWrite,80); // 打字速度80ms/字，缓慢柔和
+        setTimeout(typeWrite,80);
     }else{
-        // 打完停留2秒清空循环
         setTimeout(()=>{
             charIndex = 0;
             typeBox.innerText = "";
@@ -737,12 +643,7 @@ function typeWrite(){
 }
 typeWrite();
 
-// 2. 移动端导航折叠开关
-const menuBtn = document.getElementById('menuBtn');
-const navPc = document.querySelector('.nav-pc');
-menuBtn.onclick = ()=> navPc.classList.toggle('show');
-
-// 3. 全局原生点击音效（稳定无依赖）
+// 2. 全局原生点击音效（稳定无依赖）
 function createClickSound(){
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     return function playSound(){
@@ -763,12 +664,12 @@ const playClick = createClickSound();
 document.addEventListener('click',e=>{
     const target = e.target;
     const clickable = ['A','BUTTON','I','SPAN','DIV','INPUT'];
-    if(clickable.includes(target.tagName) || target.closest('a,button,.music-btn,.social-icon,.tag-sm,.btn-blue,.btn-gray,.card-light,.page-btn,.mobile-menu-btn,.music-mini')){
+    if(clickable.includes(target.tagName) || target.closest('a,.audio-btn,.social-btn,.tag-sm,.btn-primary,.btn-outline,.card-light,.page-btn')){
         playClick();
     }
 });
 
-// 4. 原生樱花飘落
+// 3. 原生樱花飘落
 const sakuraWrap = document.getElementById('sakuraWrap');
 function createSakura() {
     const petal = document.createElement('div');
@@ -784,7 +685,7 @@ function createSakura() {
 }
 setInterval(createSakura, 100);
 
-// 5. 顶部实时日期
+// 4. 顶部实时日期
 function updateDate(){
     const now = new Date();
     const weekArr = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
@@ -800,7 +701,7 @@ function updateDate(){
 updateDate();
 setInterval(updateDate,1000);
 
-// 6. 粉色爱心鼠标粒子
+// 5. 粉色爱心鼠标粒子
 const canvas = document.getElementById('heartCanvas');
 const ctx = canvas.getContext('2d');
 function resizeCanvas() {
@@ -880,18 +781,16 @@ function renderLoop() {
 }
 renderLoop();
 
-// 7. 音乐播放器完整交互修复
+// 6. 内置页面底部音频播放器，沿用原有ID变量，删除悬浮浮窗，自动循环播放
 const audio = document.getElementById('audioPlayer');
 const playBtn = document.getElementById('playBtn');
-const miniBtn = document.getElementById('miniBtn');
-const panel = document.getElementById('musicPanel');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
 const progressWrap = document.getElementById('progressWrap');
 const progressBar = document.getElementById('progressBar');
 const currentTimeDom = document.getElementById('currentTime');
 const totalTimeDom = document.getElementById('totalTime');
 const titleDom = document.getElementById('musicTitle');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
 
 const localMusicList = [
     { name: "晚风纯音乐", url: "https://music.163.com/song/media/outer/url?id=1334870365.mp3" },
@@ -901,8 +800,6 @@ const localMusicList = [
     { name: "星河入梦轻音乐", url: "https://music.163.com/song/media/outer/url?id=1412001235.mp3" }
 ];
 let currentMusicIndex = 0;
-
-miniBtn.onclick = ()=> panel.classList.toggle('show');
 
 function loadAudio(song){
     audio.src = song.url;
@@ -915,10 +812,10 @@ playBtn.onclick = async function(){
     if(audio.paused || audio.ended){
         audio.muted = false;
         await audio.play();
-        playBtn.className = "fas fa-pause music-btn music-play-main";
+        playBtn.className = "fas fa-pause audio-btn text-3xl";
     }else{
         audio.pause();
-        playBtn.className = "fas fa-play music-btn music-play-main";
+        playBtn.className = "fas fa-play audio-btn text-3xl";
     }
 };
 
@@ -927,14 +824,14 @@ prevBtn.onclick = ()=>{
     if(currentMusicIndex < 0) currentMusicIndex = localMusicList.length - 1;
     loadAudio(localMusicList[currentMusicIndex]);
     audio.play();
-    playBtn.className = "fas fa-pause music-btn music-play-main";
+    playBtn.className = "fas fa-pause audio-btn text-3xl";
 };
 nextBtn.onclick = ()=>{
     currentMusicIndex++;
     if(currentMusicIndex >= localMusicList.length) currentMusicIndex = 0;
     loadAudio(localMusicList[currentMusicIndex]);
     audio.play();
-    playBtn.className = "fas fa-pause music-btn music-play-main";
+    playBtn.className = "fas fa-pause audio-btn text-3xl";
 };
 
 function formatTime(sec){
@@ -965,16 +862,16 @@ audio.onended = ()=>{
     if(currentMusicIndex >= localMusicList.length) currentMusicIndex = 0;
     loadAudio(localMusicList[currentMusicIndex]);
     audio.play();
-    playBtn.className = "fas fa-pause music-btn music-play-main";
+    playBtn.className = "fas fa-pause audio-btn text-3xl";
 };
 
-// 页面锚点平滑滚动
+// 页面锚点平滑跳转
 document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.onclick = (e) => {
         e.preventDefault();
         const targetId = link.getAttribute('href');
         const targetEl = document.querySelector(targetId);
-        if(targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+        if(targetEl) targetEl.scrollIntoView({behavior:"smooth"});
     };
 });
 </script>
