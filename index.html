@@ -14,7 +14,8 @@
                 extend: {
                     colors: {
                         primary: '#2563eb',
-                        love: '#ff66a8'
+                        love: '#ff66a8',
+                        ncm: '#ec4141'
                     },
                     fontFamily: {
                         mono: ['Consolas', 'Menlo', 'monospace'],
@@ -32,7 +33,7 @@
         }
         html {
             scroll-behavior: smooth;
-            cursor: none; /* 隐藏系统鼠标 */
+            cursor: none;
         }
         body {
             font-family: var(--font-sans);
@@ -41,7 +42,6 @@
             overflow-x: hidden;
             line-height: 1.7;
         }
-        /* 爱心画布底层 */
         #heartCanvas {
             position: fixed;
             top: 0;
@@ -55,7 +55,6 @@
             position: relative;
             z-index: 10;
         }
-        /* 极简浅网格背景 */
         .hero-bg {
             position: fixed;
             top: 0;
@@ -84,7 +83,6 @@
         .dot1 {width:6px;height:6px;top:8%;left:10%}
         .dot2 {width:8px;height:8px;top:22%;right:18%}
         .dot3 {width:5px;height:5px;bottom:15%;left:45%}
-        /* 头像外圈淡蓝光晕 */
         .avatar-wrap {
             width: 140px;
             height: 140px;
@@ -222,13 +220,15 @@
         .hover-scale {
             cursor: none;
         }
-        /* ========== 悬浮音乐播放器样式 ========== */
+        /* ========== 网易云音乐播放器 修复UI ========== */
         .music-box {
             position: fixed;
             bottom: 24px;
             right: 24px;
-            z-index: 999;
-            transition: all 0.3s ease;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
         }
         .music-mini {
             width: 56px;
@@ -243,17 +243,53 @@
             cursor: pointer;
         }
         .music-panel {
-            width: 320px;
-            background: rgba(255,255,255,0.94);
+            width: 360px;
+            background: rgba(255,255,255,0.96);
             border: 1px solid #e5e7eb;
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
             padding: 20px;
             margin-bottom: 12px;
             display: none;
         }
         .music-panel.show {
             display: block;
+        }
+        .music-search {
+            display: flex;
+            gap:8px;
+            margin-bottom:12px;
+        }
+        .music-search input {
+            flex:1;
+            border:1px solid #e2e8f0;
+            border-radius:12px;
+            padding:8px 12px;
+            outline:none;
+        }
+        .music-search button {
+            background:#ncm;
+            color:white;
+            border:none;
+            border-radius:12px;
+            padding:0 12px;
+            cursor:pointer;
+        }
+        .song-list {
+            max-height:140px;
+            overflow-y:auto;
+            margin:10px 0;
+        }
+        .song-item {
+            padding:6px 4px;
+            font-size:13px;
+            display:flex;
+            justify-content:space-between;
+            cursor:pointer;
+            border-radius:8px;
+        }
+        .song-item:hover {
+            background:#f1f5f9;
         }
         .music-progress {
             width: 100%;
@@ -292,7 +328,7 @@
             color: #2563eb;
         }
         .music-play-main {
-            font-size: 30px;
+            font-size: 30px !important;
         }
         .music-title {
             font-weight: 600;
@@ -303,23 +339,33 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        /* 顶部日期模块 */
+        .date-bar {
+            text-align:center;
+            padding:8px 0;
+            color:#444;
+            font-size:14px;
+        }
     </style>
 </head>
 <body class="relative">
-    <!-- 底层网格背景 -->
     <div class="hero-bg">
         <div class="grid-lines"></div>
         <div class="dot-deco dot1"></div>
         <div class="dot-deco dot2"></div>
         <div class="dot-deco dot3"></div>
     </div>
-    <!-- 爱心画布 -->
     <canvas id="heartCanvas"></canvas>
 
-    <!-- 悬浮音乐播放器 -->
+    <!-- 网易云音乐播放器 修复版 -->
     <div class="music-box">
         <div class="music-panel" id="musicPanel">
-            <div class="music-title" id="musicTitle">纯音乐示例</div>
+            <div class="music-search">
+                <input id="searchInput" placeholder="网易云歌曲名搜索">
+                <button id="searchBtn">搜索</button>
+            </div>
+            <div class="song-list" id="songList"></div>
+            <div class="music-title" id="musicTitle">未播放歌曲</div>
             <div class="music-progress" id="progressWrap">
                 <div class="music-progress-bar" id="progressBar"></div>
             </div>
@@ -332,20 +378,18 @@
                 <i class="fas fa-play music-btn music-play-main" id="playBtn"></i>
                 <i class="fas fa-step-forward music-btn" id="nextBtn"></i>
             </div>
-            <!-- 音频资源，可替换自己音乐链接 -->
             <audio id="audioPlayer" muted preload="metadata">
-                <source src="https://music.163.com/song/media/outer/url?id=1334870365.mp3" type="audio/mpeg">
-            
         </div>
         <div class="music-mini" id="miniBtn">
             <i class="fas fa-music"></i>
         </div>
     </div>
 
-    <!-- 页面主体内容 -->
     <div class="page-layer">
+        <!-- 顶部实时日期 -->
+        <div class="date-bar" id="dateBox"></div>
         <!-- 导航栏 -->
-        <header class="wrap glass-bar sticky top-0 mt-6 px-6 py-4 flex justify-between items-center hover-scale">
+        <header class="wrap glass-bar sticky top-0 mt-2 px-6 py-4 flex justify-between items-center hover-scale">
             <a href="#" class="text-xl font-bold text-gray-800 flex items-center gap-2">
                 <i class="fa fa-feather text-primary"></i>飞鸟折白梅
             </a>
@@ -358,7 +402,6 @@
             <a href="#about" class="btn-blue text-sm hover-scale">联系我</a>
         </header>
 
-        <!-- 首页Hero 左右分栏 -->
         <section class="wrap py-14 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="text-center space-y-7 hover-scale">
                 <div class="avatar-wrap mx-auto">
@@ -450,7 +493,6 @@
             </div>
         </section>
 
-        <!-- 博客区域 -->
         <main class="wrap grid grid-cols-1 lg:grid-cols-4 gap-8 py-10" id="article">
             <div class="lg:col-span-3 space-y-6">
                 <h2 class="text-2xl font-bold border-l-4 border-primary pl-4">最新文章</h2>
@@ -463,7 +505,7 @@
                         <span><i class="fa fa-eye mr-1"></i> 2143 阅读</span>
                     </div>
                     <p class="text-gray-600 leading-relaxed">使用 Tailwind CSS 搭建纯静态博客，搭配 Cloudflare Pages 免费托管，无需服务器和数据库，国内访问速度优化，自带动态网格背景。</p>
-                    <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
+                    <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">查看文章 <i class="fa fa-arrow-right ml-1"></i></a>
                 </div>
                 <div class="card-light p-6 hover-scale">
                     <span class="tag-sm mb-3 inline-block">技术分享</span>
@@ -474,7 +516,7 @@
                         <span><i class="fa fa-eye mr-1"></i> 1567 阅读</span>
                     </div>
                     <p class="text-gray-600">替换海外字体资源，使用国内稳定CDN，解决页面白屏、加载缓慢问题。</p>
-                    <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
+                    <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">查看文章 <i class="fa fa-arrow-right ml-1"></i></a>
                 </div>
                 <div class="card-light p-6 hover-scale">
                     <span class="tag-sm mb-3 inline-block">部署教程</span>
@@ -485,7 +527,7 @@
                         <span><i class="fa fa-eye mr-1"></i> 982 阅读</span>
                     </div>
                     <p class="text-gray-600">免费静态站点托管教程，自定义缓存规则，图片懒加载配置。</p>
-                    <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">阅读全文 <i class="fa fa-arrow-right ml-1"></i></a>
+                    <a href="#" class="text-primary mt-4 inline-block hover:translate-x-1 transition-all">查看文章 <i class="fa fa-arrow-right ml-1"></i></a>
                 </div>
                 <div class="flex justify-center gap-2 py-4">
                     <span class="card-light px-4 py-2 rounded-lg text-gray-400 cursor-not-allowed">上一页</span>
@@ -558,7 +600,23 @@
     </div>
 
 <script>
-// ====================== 爱心鼠标粒子特效 ======================
+// 1. 顶部实时日期星期
+function updateDate(){
+    const now = new Date();
+    const weekArr = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+    const year = now.getFullYear();
+    const month = String(now.getMonth()+1).padStart(2,'0');
+    const day = String(now.getDate()).padStart(2,'0');
+    const week = weekArr[now.getDay()];
+    const hour = String(now.getHours()).padStart(2,'0');
+    const min = String(now.getMinutes()).padStart(2,'0');
+    const timeStr = `${year}年${month}月${day}日 ${week} ${hour}:${min}`;
+    document.getElementById('dateBox').innerText = timeStr;
+}
+updateDate();
+setInterval(updateDate,1000);
+
+// 2. 爱心鼠标粒子特效
 const canvas = document.getElementById('heartCanvas');
 const ctx = canvas.getContext('2d');
 function resizeCanvas() {
@@ -638,7 +696,7 @@ function renderLoop() {
 }
 renderLoop();
 
-// ====================== 音乐播放器逻辑 ======================
+// 3. 网易云音乐播放器 修复播放暂停、搜索API
 const audio = document.getElementById('audioPlayer');
 const playBtn = document.getElementById('playBtn');
 const miniBtn = document.getElementById('miniBtn');
@@ -650,92 +708,154 @@ const totalTimeDom = document.getElementById('totalTime');
 const titleDom = document.getElementById('musicTitle');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const songListDom = document.getElementById('songList');
 
-// 歌单列表，可自行替换歌曲链接和名称
-const musicList = [
-    {
-        name: "晚风纯音乐",
-        src: "https://music.163.com/song/media/outer/url?id=1334870365.mp3"
-    },
-    {
-        name: "春日温柔钢琴曲",
-        src: "https://music.163.com/song/media/outer/url?id=1884447702.mp3"
-    },
-    {
-        name: "静谧自习轻音乐",
-        src: "https://music.163.com/song/media/outer/url?id=1412001235.mp3"
-    }
-];
+let playList = [];
 let currentIndex = 0;
 
-// 切换面板显示隐藏
-miniBtn.onclick = ()=>{
-    panel.classList.toggle('show');
-};
-// 切换播放暂停
-playBtn.onclick = ()=>{
-    if(audio.paused){
-        audio.muted = false; // 取消静音
-        audio.play();
-        playBtn.className = "fas fa-pause music-btn music-play-main";
+// 展开/收起面板
+miniBtn.onclick = ()=> panel.classList.toggle('show');
+
+// 修复播放暂停核心逻辑
+playBtn.onclick = function(){
+    if(audio.paused || audio.ended){
+        audio.muted = false;
+        audio.play().then(()=>{
+            playBtn.className = "fas fa-pause music-btn music-play-main";
+        }).catch(err=>console.log("播放拦截：点击页面后重试"));
     }else{
         audio.pause();
         playBtn.className = "fas fa-play music-btn music-play-main";
     }
 };
+
 // 上一曲
 prevBtn.onclick = ()=>{
+    if(playList.length === 0) return;
     currentIndex--;
-    if(currentIndex < 0) currentIndex = musicList.length - 1;
-    loadMusic();
+    if(currentIndex < 0) currentIndex = playList.length - 1;
+    loadSong(currentIndex);
     audio.play();
     playBtn.className = "fas fa-pause music-btn music-play-main";
 };
 // 下一曲
 nextBtn.onclick = ()=>{
+    if(playList.length === 0) return;
     currentIndex++;
-    if(currentIndex >= musicList.length) currentIndex = 0;
-    loadMusic();
+    if(currentIndex >= playList.length) currentIndex = 0;
+    loadSong(currentIndex);
     audio.play();
     playBtn.className = "fas fa-pause music-btn music-play-main";
 };
-// 加载歌曲
-function loadMusic(){
-    const item = musicList[currentIndex];
-    audio.src = item.src;
-    titleDom.innerText = item.name;
+
+// 加载单曲
+function loadSong(idx){
+    const song = playList[idx];
+    audio.src = song.url;
+    titleDom.innerText = `${song.name} - ${song.ar}`;
     audio.load();
 }
-loadMusic();
+
 // 格式化时间
 function formatTime(s){
+    if(isNaN(s)) return "00:00";
     let min = Math.floor(s / 60);
     let sec = Math.floor(s % 60);
     return String(min).padStart(2,'0') + ":" + String(sec).padStart(2,'0');
 }
+
 // 进度更新
 audio.ontimeupdate = ()=>{
-    let per = (audio.currentTime / audio.duration) * 100;
-    progressBar.style.width = per + "%";
-    currentTimeDom.innerText = formatTime(audio.currentTime);
+    if(audio.duration){
+        let per = (audio.currentTime / audio.duration) * 100;
+        progressBar.style.width = per + "%";
+        currentTimeDom.innerText = formatTime(audio.currentTime);
+    }
 };
-// 总时长获取
-audio.onloadedmetadata = ()=>{
-    totalTimeDom.innerText = formatTime(audio.duration);
+audio.onloadedmetadata = ()=> totalTimeDom.innerText = formatTime(audio.duration);
+// 播放结束自动下一首
+audio.onended = ()=>{
+    currentIndex++;
+    if(currentIndex >= playList.length) currentIndex = 0;
+    loadSong(currentIndex);
+    audio.play();
+    playBtn.className = "fas fa-pause music-btn music-play-main";
 };
-// 点击进度条跳转
+// 点击进度跳转
 progressWrap.onclick = (e)=>{
+    if(!audio.duration) return;
     let rect = progressWrap.getBoundingClientRect();
     let per = (e.clientX - rect.left) / rect.width;
     audio.currentTime = per * audio.duration;
 };
-// 播放结束自动下一首
-audio.onended = ()=>{
-    currentIndex++;
-    if(currentIndex >= musicList.length) currentIndex = 0;
-    loadMusic();
-    audio.play();
-    playBtn.className = "fas fa-pause music-btn music-play-main";
+
+// 网易云搜索API（公开代理接口）
+async function searchNetEase(keyword){
+    const proxy = "https://api.caiji.cloud/api/netease/search?keywords=" + encodeURIComponent(keyword);
+    try{
+        const res = await fetch(proxy);
+        const data = await res.json();
+        if(data.result && data.result.songs){
+            return data.result.songs;
+        }
+        return [];
+    }catch(e){
+        alert("搜索接口异常，请稍后重试");
+        return [];
+    }
+}
+// 获取歌曲播放地址
+async function getSongUrl(id){
+    const proxy = `https://api.caiji.cloud/api/netease/url?id=${id}`;
+    const res = await fetch(proxy);
+    const data = await res.json();
+    if(data.data && data.data[0]?.url){
+        return data.data[0].url;
+    }
+    return null;
+}
+// 渲染搜索列表
+async function renderSongList(songs){
+    songListDom.innerHTML = "";
+    playList = [];
+    for(let s of songs.slice(0,10)){
+        const url = await getSongUrl(s.id);
+        if(!url) continue;
+        const item = {
+            id:s.id,
+            name:s.name,
+            ar:s.ar.map(i=>i.name).join("/"),
+            url:url
+        };
+        playList.push(item);
+        const div = document.createElement('div');
+        div.className = "song-item";
+        div.innerHTML = `<span>${item.name} - ${item.ar}</span><i class="fas fa-play"></i>`;
+        div.onclick = ()=>{
+            currentIndex = playList.findIndex(x=>x.id === item.id);
+            loadSong(currentIndex);
+            audio.play();
+            playBtn.className = "fas fa-pause music-btn music-play-main";
+        };
+        songListDom.appendChild(div);
+    }
+}
+// 搜索按钮点击
+searchBtn.onclick = async ()=>{
+    const kw = searchInput.value.trim();
+    if(!kw) return alert("请输入歌曲名");
+    songListDom.innerHTML = "<div style='text-align:center;padding:10px'>搜索中...</div>";
+    const list = await searchNetEase(kw);
+    if(list.length === 0){
+        songListDom.innerHTML = "<div style='text-align:center;padding:10px'>无匹配歌曲</div>";
+        return;
+    }
+    renderSongList(list);
+};
+searchInput.onkeydown = (e)=>{
+    if(e.key === 'Enter') searchBtn.click();
 };
 
 // 页面平滑滚动
